@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Compra y vende sin miedo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black: #F8ECE1;
+  --white: #0a1628;
+  --accent: #00c896;
+  --accent2: #ff8c00;
+  --blue: #1a6fff;
+  --surface: #eee0d0;
+  --border: #d9c8b4;
+  --muted: #7a6a5a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #F8ECE1;
+  color: var(--white);
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #a0a0b0;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: #ffffff; }
+
+.nav-cta {
+  background: var(--accent2) !important;
+  color: white !important;
+  padding: 10px 22px;
+  border-radius: 4px;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.2s !important;
+}
+
+.nav-cta:hover { background: #e07800 !important; transform: translateY(-1px); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(26,111,255,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,200,150,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,200,150,0.1);
+  border: 1px solid rgba(0,200,150,0.3);
+  border-radius: 2px;
+  padding: 6px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+  width: fit-content;
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 10vw, 140px);
+  line-height: 0.92;
+  letter-spacing: -1px;
+  max-width: 900px;
+  margin-bottom: 32px;
+}
+
+.hero-headline .line-accent { color: #ff8c00; }
+.hero-headline .line-trust { color: #1a6fff; }
+.hero-headline .line-white { color: #0a1628; }
+
+.hero-sub {
+  font-size: 18px;
+  color: #7a6a5a;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  font-weight: 400;
+}
+
+.hero-sub strong { color: var(--white); font-weight: 600; }
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-hero {
+  background: var(--accent2);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-hero:hover { background: #e07800; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,140,0,0.3); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ghost:hover { border-color: var(--white); }
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 13px;
+  color: #7a6a5a;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* ─── PROBLEM ─── */
+.problem {
+  padding: 120px 48px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.problem-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 0.95;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+.section-body {
+  color: #7a6a5a;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.problem-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.problem-card {
+  background: #F8ECE1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: border-color 0.2s;
+}
+
+.problem-card:hover { border-color: rgba(0,200,150,0.3); }
+
+.problem-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.problem-card-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.problem-card-body {
+  font-size: 13px;
+  color: #7a6a5a;
+  line-height: 1.5;
+}
+
+/* ─── HOW IT WORKS ─── */
+.how {
+  padding: 120px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.how-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+  z-index: 0;
+}
+
+.step {
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.step:nth-child(1) .step-num { background: var(--accent); color: #020b18; }
+.step:nth-child(2) .step-num { background: var(--surface); border: 2px solid var(--accent); color: var(--accent); }
+.step:nth-child(3) .step-num { background: var(--surface); border: 2px solid var(--blue); color: #6699ff; }
+.step:nth-child(4) .step-num { background: var(--blue); color: white; }
+
+.step-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.step-body {
+  font-size: 13px;
+  color: #7a6a5a;
+  line-height: 1.5;
+}
+
+/* ─── TRUST BAR ─── */
+.trust-bar {
+  background: var(--accent);
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  overflow: hidden;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  color: #020b18;
+}
+
+.trust-item span { font-size: 20px; }
+
+/* ─── FOR WHO ─── */
+.for-who {
+  padding: 120px 48px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.for-who-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.for-who-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.for-card {
+  border-radius: 12px;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.for-card.buyer { background: linear-gradient(135deg, rgba(26,111,255,0.12), rgba(26,111,255,0.03)); border-color: rgba(26,111,255,0.25); }
+.for-card.seller { background: linear-gradient(135deg, rgba(0,200,150,0.12), rgba(0,200,150,0.03)); border-color: rgba(0,200,150,0.25); }
+
+.for-card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.buyer .for-card-tag { color: #6699ff; }
+.seller .for-card-tag { color: var(--accent); }
+
+.for-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.for-card-body {
+  color: #7a6a5a;
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.for-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.for-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--white);
+}
+
+.for-list li::before {
+  content: '✓';
+  font-weight: 700;
+}
+
+.buyer .for-list li::before { color: #6699ff; }
+.seller .for-list li::before { color: var(--accent); }
+
+.card-big-num {
+  position: absolute;
+  bottom: -20px;
+  right: 24px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  opacity: 0.04;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ─── COURIERS ─── */
+.couriers {
+  padding: 80px 48px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.courier-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.courier-logo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #7a6a5a;
+  transition: all 0.2s;
+}
+
+.courier-logo:hover { border-color: var(--accent); color: var(--white); }
+
+/* ─── CTA ─── */
+.cta-section {
+  padding: 120px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,200,150,0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(60px, 8vw, 110px);
+  line-height: 0.95;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+.cta-title .accent { color: var(--accent); }
+
+.cta-sub {
+  color: #7a6a5a;
+  font-size: 18px;
+  max-width: 500px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+
+.cta-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.cta-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--white);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-size: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cta-input:focus { border-color: var(--accent); }
+.cta-input::placeholder { color: #7a6a5a; }
+
+.cta-btn {
+  background: var(--accent2);
+  color: white;
+  border: none;
+  padding: 16px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.cta-btn:hover { background: #e07800; transform: translateY(-1px); }
+
+.cta-note {
+  font-size: 12px;
+  color: #7a6a5a;
+  margin-top: 16px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000000;
+}
+
+.footer-logo { color: #a0a0b0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #7a6a5a;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  color: #7a6a5a;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--white); }
+
+.footer-copy {
+  font-size: 12px;
+  color: #7a6a5a;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #061428;
+  border: 1px solid rgba(0,200,150,0.3);
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 14px;
+  color: var(--white);
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ─── ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.footer-links a { color: #a0a0b0; text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-links a:hover { color: #ffffff; }
+.footer-copy { font-size: 12px; color: #a0a0b0; font-family: "DM Mono", monospace; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-logo">
+    <svg width="200" height="60" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="120" fill="#020b18" rx="16"/>
+      <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgNav)"/>
+      <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+      <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+      <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="116" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+      <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+      <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+      <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+      <text x="300" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+      <text x="116" y="100" font-family="'Space Grotesk', Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+      <defs>
+        <linearGradient id="sgNav" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a6fff"/>
+          <stop offset="100%" stop-color="#00c896"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#para-quien">Para quién</a></li>
+    <li><a href="#registro">Registrarse</a></li>
+    <li><a href="file:///C:/Users/clien/Desktop/Juan/MISI%C3%93N%20EMPRENDE%20593/files/trustbuy-vender.html" class="nav-cta">🔒 Vender aquí →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-tag">
+    🛡️ Ecuador · Compraventa verificada · MVP en producción
+  </div>
+
+  <h1 class="hero-headline">
+    <span class="line-white">PAGA SOLO</span><br>
+    <span class="line-trust">CUANDO</span><br>
+    <span class="line-accent">LLEGUE.</span>
+  </h1>
+
+  <p class="hero-sub">
+    El dinero se queda seguro hasta que el producto llegue verificado.
+    <strong>Sin estafas. Sin excusas. Sin drama.</strong>
+    La primera plataforma de compraventa verificada del Ecuador.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#registro" class="btn-hero">Quiero probarla gratis →</a>
+    <a href="file:///C:/Users/clien/Desktop/Juan/MISI%C3%93N%20EMPRENDE%20593/files/trustbuy-vender.html" class="btn-ghost">🔒 Vender con TrustBuy →</a>
+    <a href="#como-funciona" class="btn-ghost">¿Cómo funciona? ↓</a>
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Pago protegido hasta entrega</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">4%</div>
+      <div class="hero-stat-label">Comisión plana — sin sorpresas</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">0</div>
+      <div class="hero-stat-label">Estafas posibles con TrustBuy</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span>🔒</span> Pago en custodia</div>
+  <div class="trust-item"><span>📦</span> Verificación física</div>
+  <div class="trust-item"><span>✅</span> Courier aliado</div>
+  <div class="trust-item"><span>💸</span> Reembolso garantizado</div>
+  <div class="trust-item"><span>🇪🇨</span> 100% Ecuador</div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problema">
+  <div class="problem-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">El problema</div>
+      <h2 class="section-title">EL<br>MERCADO<br>ESTÁ ROTO.</h2>
+      <p class="section-body">
+        Cada día miles de ecuatorianos pierden dinero comprando y vendiendo en grupos de Facebook, WhatsApp y Marketplace.<br><br>
+        El comprador tiene miedo de pagar. El vendedor tiene miedo de enviar primero. El resultado: <strong style="color:var(--white)">nadie confía en nadie.</strong>
+      </p>
+    </div>
+    <div class="problem-cards reveal">
+      <div class="problem-card">
+        <div class="problem-icon">💀</div>
+        <div>
+          <div class="problem-card-title">Te pagan con comprobante falso</div>
+          <div class="problem-card-body">Envías el producto y el "comprobante de pago" era photoshop. Ya no hay nada que hacer.</div>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📦</div>
+        <div>
+          <div class="problem-card-title">El producto llega diferente</div>
+          <div class="problem-card-body">Pagas por un iPhone en perfecto estado y llega roto, falsificado, o simplemente no llega.</div>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🚫</div>
+        <div>
+          <div class="problem-card-title">El vendedor desaparece</div>
+          <div class="problem-card-body">Transferiste, el vendedor "está de viaje" y el número ya no existe. Dinero perdido.</div>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">😤</div>
+        <div>
+          <div class="problem-card-title">No tienes a quién reclamar</div>
+          <div class="problem-card-body">Facebook, WhatsApp y Marketplace no son responsables de nada. Estás solo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona" style="padding: 120px 48px; background: var(--black);">
+  <div class="how" style="padding: 0;">
+    <div class="how-header reveal">
+      <div class="section-eyebrow">La solución</div>
+      <h2 class="section-title">ASÍ FUNCIONA<br><span style="color:var(--accent)">TRUSTBUY</span></h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Acuerdo</div>
+        <div class="step-body">Comprador y vendedor acuerdan el precio en TrustBuy</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Custodia</div>
+        <div class="step-body">El comprador paga. El dinero queda bloqueado en custodia segura</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Verificación</div>
+        <div class="step-body">Nuestro courier inspecciona el producto físicamente antes de enviarlo</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Pago liberado</div>
+        <div class="step-body">El comprador confirma y el pago se libera al vendedor. Todos ganan.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<section class="for-who" id="para-quien">
+  <div class="for-who-inner">
+    <div class="for-who-header reveal">
+      <div class="section-eyebrow">Para quién</div>
+      <h2 class="section-title">PARA EL QUE<br><span style="color:var(--accent)">SE CANSÓ DE PERDER.</span></h2>
+    </div>
+    <div class="cards-grid reveal">
+      <div class="for-card buyer">
+        <div class="for-card-tag">Eres comprador</div>
+        <div class="for-card-title">COMPRA<br>SEGURO.</div>
+        <div class="for-card-body">Tu dinero nunca llega al vendedor hasta que el producto esté verificado y en tus manos.</div>
+        <ul class="for-list">
+          <li>Pago protegido al 100%</li>
+          <li>Verificación física del producto</li>
+          <li>Reembolso garantizado si algo falla</li>
+          <li>Soporte ante disputas</li>
+        </ul>
+        <div class="card-big-num">B</div>
+      </div>
+      <div class="for-card seller">
+        <div class="for-card-tag">Eres vendedor</div>
+        <div class="for-card-title">VENDE<br>CONFIADO.</div>
+        <div class="for-card-body">Sabes que el comprador ya pagó antes de que envíes. Cero riesgo, máxima credibilidad.</div>
+        <ul class="for-list">
+          <li>Confirmación de pago antes de enviar</li>
+          <li>Cobro garantizado al entregar</li>
+          <li>Reputación verificada en tu perfil</li>
+          <li>Más ventas con más confianza</li>
+        </ul>
+        <div class="card-big-num">V</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURIERS -->
+<section class="couriers reveal">
+  <div class="section-eyebrow">Aliados de verificación</div>
+  <h2 class="section-title" style="font-family:'Bebas Neue';font-size:48px;margin-bottom:16px">COURIERS QUE<br>NOS RESPALDAN</h2>
+  <p style="color:var(--muted);font-size:15px;line-height:1.6">La verificación física se hace en sucursales de nuestros couriers aliados en todo el Ecuador.</p>
+  <div class="courier-logos">
+    <div class="courier-logo">SERVIENTREGA</div>
+    <div class="courier-logo">LAAR COURIER</div>
+    <div class="courier-logo">SPEED</div>
+    <div class="courier-logo">TU ALIADO →</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="registro">
+  <div class="cta-title reveal">
+    ¿LISTO PARA<br><span class="accent">CONFIAR</span><br>DE NUEVO?
+  </div>
+  <p class="cta-sub reveal">Únete a la lista de espera. Sé de los primeros en usar TrustBuy cuando lancemos oficialmente.</p>
+  <div class="cta-form reveal">
+    <input type="email" class="cta-input" id="email-input" placeholder="tu@email.com">
+    <button class="cta-btn" onclick="joinWaitlist()">Unirse →</button>
+  </div>
+  <div class="cta-note reveal">Sin spam. Sin compromisos. Solo el lanzamiento.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">
+    <svg width="200" height="60" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="120" fill="#020b18" rx="16"/>
+      <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgFt)"/>
+      <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+      <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+      <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="116" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+      <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+      <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+      <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+      <text x="300" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+      <text x="116" y="100" font-family="'Space Grotesk', Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+      <defs>
+        <linearGradient id="sgFt" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a6fff"/>
+          <stop offset="100%" stop-color="#00c896"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <ul class="footer-links">
+    <li><a href="https://trustbuy-api.onrender.com/docs" target="_blank">API Docs</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#registro">Registrarse</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 TrustBuy — Ecuador 🇪🇨</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Waitlist
+  async function joinWaitlist() {
+    const email = document.getElementById('email-input').value.trim();
+    if (!email || !email.includes('@')) {
+      showToast('Ingresa un email válido');
+      return;
+    }
+
+    const btn = document.querySelector('.cta-btn');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://trustbuy-api.onrender.com/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      });
+
+      if (res.ok) {
+        showToast('✓ ' + email + ' en lista de espera. ¡Nos vemos en el lanzamiento!');
+        document.getElementById('email-input').value = '';
+      } else {
+        // Fallback: save locally and show success anyway
+        const saved = JSON.parse(localStorage.getItem('tb_waitlist') || '[]');
+        saved.push({ email, date: new Date().toISOString() });
+        localStorage.setItem('tb_waitlist', JSON.stringify(saved));
+        showToast('✓ ' + email + ' registrado. ¡Nos vemos en el lanzamiento!');
+        document.getElementById('email-input').value = '';
+      }
+    } catch(e) {
+      // Fallback: save locally
+      const saved = JSON.parse(localStorage.getItem('tb_waitlist') || '[]');
+      saved.push({ email, date: new Date().toISOString() });
+      localStorage.setItem('tb_waitlist', JSON.stringify(saved));
+      showToast('✓ ' + email + ' registrado. ¡Nos vemos en el lanzamiento!');
+      document.getElementById('email-input').value = '';
+    }
+
+    btn.textContent = 'Unirse →';
+    btn.disabled = false;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  // Enter key on email
+  document.getElementById('email-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') joinWaitlist();
+  });
+</script>
+</body>
+</html>

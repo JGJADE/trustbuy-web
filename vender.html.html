@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Vende seguro en redes sociales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F8ECE1;
+  --black: #020b18;
+  --white: #e8f4ff;
+  --accent: #00c896;
+  --amber: #ff8c00;
+  --blue: #1a6fff;
+  --surface: #eee0d0;
+  --border: #d9c8b4;
+  --muted: #7a6a5a;
+  --text: #0a1628;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: var(--black);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-back {
+  color: #a0a0b0;
+  font-size: 13px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: white; }
+
+/* HERO STRIP */
+.hero-strip {
+  background: linear-gradient(135deg, var(--black) 0%, #0a1f3d 100%);
+  padding: 56px 40px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0,200,150,0.1), transparent 60%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.hero-title span { color: var(--accent); }
+
+.hero-sub {
+  font-size: 16px;
+  color: #6a8aaa;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* STEPS BAR */
+.steps-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.step-item.active { color: var(--text); }
+.step-item.done { color: var(--accent); }
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-item.active .step-num { background: var(--blue); color: white; }
+.step-item.done .step-num { background: var(--accent); color: white; }
+
+.step-sep {
+  width: 48px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 12px;
+}
+
+/* MAIN LAYOUT */
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* FORM CARD */
+.form-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.form-header {
+  background: var(--black);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-header-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--white);
+}
+
+.form-header-sub {
+  font-size: 12px;
+  color: #6a8aaa;
+  font-family: 'DM Mono', monospace;
+  margin-top: 2px;
+}
+
+.form-body { padding: 24px; }
+
+.field { margin-bottom: 18px; }
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+  font-family: 'DM Mono', monospace;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input:focus, textarea:focus, select:focus { border-color: var(--blue); }
+
+textarea { resize: vertical; min-height: 80px; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.price-wrap { position: relative; }
+.price-wrap input { padding-left: 32px; }
+.price-prefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 15px;
+}
+
+.btn-generate {
+  width: 100%;
+  background: var(--amber);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+  margin-top: 8px;
+}
+
+.btn-generate:hover { background: #e07800; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,140,0,0.3); }
+
+/* PREVIEW CARD */
+.preview-card {
+  position: sticky;
+  top: 24px;
+}
+
+.preview-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* PRODUCT CARD PREVIEW */
+.product-preview {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.product-img-area {
+  background: linear-gradient(135deg, #eee0d0, #d9c8b4);
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 48px;
+}
+
+.trust-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--black);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trust-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.trust-badge-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.product-info { padding: 20px; }
+
+.product-title-preview {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.product-meta {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 12px;
+}
+
+.product-price-preview {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: var(--accent);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.product-price-preview span {
+  font-size: 18px;
+  color: var(--muted);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+}
+
+.escrow-notice {
+  background: rgba(0,200,150,0.08);
+  border: 1px solid rgba(0,200,150,0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-family: 'DM Mono', monospace;
+}
+
+.btn-pay-preview {
+  width: 100%;
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  border-radius: 8px;
+  cursor: default;
+  letter-spacing: 0.3px;
+}
+
+/* SHARE SECTION */
+.share-section {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.share-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link-box {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.link-box.generated { color: var(--blue); border-color: var(--blue); background: rgba(26,111,255,0.04); }
+
+.share-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.share-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.share-btn.whatsapp { border-color: #25d366; color: #25d366; }
+.share-btn.facebook { border-color: #1877f2; color: #1877f2; }
+.share-btn.copy { border-color: var(--amber); color: var(--amber); }
+.share-btn.instagram { border-color: #e1306c; color: #e1306c; }
+
+.share-btn:hover.whatsapp { background: #25d366; color: white; }
+.share-btn:hover.facebook { background: #1877f2; color: white; }
+.share-btn:hover.copy { background: var(--amber); color: white; }
+.share-btn:hover.instagram { background: #e1306c; color: white; }
+
+/* BADGE DOWNLOAD */
+.badge-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.badge-label {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.badge-preview {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+}
+
+.btn-download-badge {
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-download-badge:hover { background: #1a2a3d; }
+
+/* RESULT PANEL */
+.result-panel {
+  display: none;
+  background: white;
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,200,150,0.15);
+  margin-top: 20px;
+}
+
+.result-panel.show { display: block; }
+
+.result-icon { font-size: 48px; margin-bottom: 12px; }
+
+.result-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.result-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* HOW TO USE */
+.how-to {
+  max-width: 1000px;
+  margin: 0 auto 64px;
+  padding: 0 24px;
+}
+
+.how-to-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.how-step {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.how-step-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+}
+
+.how-step:nth-child(1) .how-step-num { background: var(--amber); color: white; }
+.how-step:nth-child(2) .how-step-num { background: var(--blue); color: white; }
+.how-step:nth-child(3) .how-step-num { background: var(--accent); color: white; }
+
+.how-step-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.how-step-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--black);
+  border: 1px solid rgba(0,200,150,0.3);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: white;
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <svg width="200" height="60" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="120" fill="#020b18" rx="16"/>
+    <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgN)"/>
+    <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+    <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+    <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="116" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+    <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+    <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+    <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+    <text x="300" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+    <text x="116" y="100" font-family="'Space Grotesk', Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+    <defs>
+      <linearGradient id="sgN" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#1a6fff"/><stop offset="100%" stop-color="#00c896"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  <a href="file:///C:/Users/clien/Desktop/Juan/MISI%C3%93N%20EMPRENDE%20593/files/trustbuy-landing.html" class="nav-back">← Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-strip">
+  <div class="hero-eyebrow">🔒 Para vendedores · Gratis · Sin complicaciones</div>
+  <h1 class="hero-title">VENDE EN REDES.<br><span>COBRA SEGURO.</span></h1>
+  <p class="hero-sub">Genera tu enlace de venta verificada en 30 segundos y compártelo donde vendes hoy.</p>
+</div>
+
+<!-- STEPS -->
+<div class="steps-bar">
+  <div class="step-item active" id="step1">
+    <div class="step-num">1</div> Llena los datos
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step2">
+    <div class="step-num">2</div> Genera tu enlace
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step3">
+    <div class="step-num">3</div> Comparte y vende
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FORM -->
+  <div>
+    <div class="form-card">
+      <div class="form-header">
+        <div>
+          <div class="form-header-title">Datos de tu producto</div>
+          <div class="form-header-sub">Se generará un enlace de pago seguro</div>
+        </div>
+      </div>
+      <div class="form-body">
+        <div class="field">
+          <label>¿Qué vendes?</label>
+          <input type="text" id="titulo" placeholder="Ej: iPhone 13 Pro 256GB Azul" oninput="updatePreview()">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Precio ($)</label>
+            <div class="price-wrap">
+              <span class="price-prefix">$</span>
+              <input type="number" id="precio" placeholder="0.00" oninput="updatePreview()">
+            </div>
+          </div>
+          <div class="field">
+            <label>Ciudad</label>
+            <select id="ciudad" onchange="updatePreview()">
+              <option value="">Selecciona</option>
+              <option>Guayaquil</option>
+              <option>Quito</option>
+              <option>Cuenca</option>
+              <option>Manta</option>
+              <option>Ambato</option>
+              <option>Santo Domingo</option>
+              <option>Otra</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Categoría</label>
+          <select id="categoria" onchange="updatePreview()">
+            <option value="">Selecciona</option>
+            <option>📱 Electrónico</option>
+            <option>👗 Ropa y accesorios</option>
+            <option>🚗 Vehículos</option>
+            <option>🏠 Hogar</option>
+            <option>⚽ Deportes</option>
+            <option>💻 Computadoras</option>
+            <option>📷 Fotografía</option>
+            <option>🎮 Videojuegos</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Descripción</label>
+          <textarea id="descripcion" placeholder="Estado, detalles, serial, etc." oninput="updatePreview()"></textarea>
+        </div>
+        <div class="field">
+          <label>Tu WhatsApp</label>
+          <input type="tel" id="whatsapp" placeholder="+593 99 999 9999" oninput="updatePreview()">
+        </div>
+        <button class="btn-generate" onclick="generateLink()">
+          🔒 Generar enlace de venta segura →
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-panel" id="result-panel">
+      <div class="result-icon">🎉</div>
+      <div class="result-title">¡Enlace generado!</div>
+      <div class="result-sub">Comparte este enlace en tus redes sociales. Cuando alguien quiera comprar, el pago quedará protegido hasta que reciba el producto.</div>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-card">
+    <div class="preview-label">Vista previa del comprador</div>
+
+    <div class="product-preview">
+      <div class="product-img-area">
+        <span id="preview-emoji">📦</span>
+        <div class="trust-badge">
+          <div class="trust-badge-dot"></div>
+          <span class="trust-badge-text">VERIFICADO</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-title-preview" id="preview-title">Tu producto aquí</div>
+        <div class="product-meta" id="preview-meta">Ciudad · Categoría</div>
+        <div class="product-price-preview" id="preview-price">$0 <span>USD</span></div>
+        <div class="escrow-notice">
+          🔒 Pago en custodia — se libera al confirmar entrega
+        </div>
+        <button class="btn-pay-preview">Pagar con TrustBuy →</button>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="share-section">
+      <div class="share-title">📤 Compartir en</div>
+      <div class="link-box" id="link-display">Tu enlace aparecerá aquí después de generar</div>
+      <div class="share-buttons">
+        <button class="share-btn whatsapp" onclick="shareWhatsApp()">💬 WhatsApp</button>
+        <button class="share-btn facebook" onclick="shareFacebook()">📘 Facebook</button>
+        <button class="share-btn copy" onclick="copyLink()">📋 Copiar</button>
+        <button class="share-btn instagram" onclick="shareInstagram()">📸 Instagram</button>
+      </div>
+
+      <!-- BADGE DOWNLOAD -->
+      <div class="badge-section">
+        <div class="badge-label">Badge para tus fotos</div>
+        <div class="badge-preview">
+          <svg width="100%" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="80" fill="#020b18"/>
+            <rect x="0" y="0" width="4" height="80" fill="#00c896"/>
+            <text x="20" y="28" font-family="'Bebas Neue', Impact, sans-serif" font-size="18" letter-spacing="1" fill="#e8f4ff">ACEPTO</text>
+            <text x="88" y="28" font-family="'Bebas Neue', Impact, sans-serif" font-size="18" letter-spacing="1" fill="#ff8c00">🔒</text>
+            <text x="108" y="28" font-family="'Bebas Neue', Impact, sans-serif" font-size="18" letter-spacing="1" fill="#00c896">TRUSTBUY</text>
+            <text x="20" y="48" font-family="'Space Grotesk', Arial, sans-serif" font-size="11" fill="#6a8aaa">Pago protegido hasta que recibas tu producto</text>
+            <text x="20" y="66" font-family="'DM Mono', monospace" font-size="10" letter-spacing="1" fill="#ff8c00">trustbuy-api.onrender.com · EC.</text>
+          </svg>
+        </div>
+        <button class="btn-download-badge" onclick="downloadBadge()">⬇ Descargar badge para mis fotos</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <div class="how-to-title">¿Cómo lo uso en mis redes?</div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <div class="how-step-title">Publica tu anuncio normal</div>
+      <div class="how-step-body">Sube tus fotos a Facebook Marketplace, grupos de WhatsApp o Instagram como siempre lo haces.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <div class="how-step-title">Agrega el enlace TrustBuy</div>
+      <div class="how-step-body">Pega tu enlace generado en la descripción del anuncio. El comprador hace clic y paga de forma segura.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <div class="how-step-title">Recibe tu pago garantizado</div>
+      <div class="how-step-body">El dinero queda en custodia. Cuando el comprador confirme la entrega, el pago llega a tu cuenta.</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'https://trustbuy-api.onrender.com';
+  let generatedLink = '';
+
+  const emojiMap = {
+    '📱 Electrónico': '📱',
+    '👗 Ropa y accesorios': '👗',
+    '🚗 Vehículos': '🚗',
+    '🏠 Hogar': '🏠',
+    '⚽ Deportes': '⚽',
+    '💻 Computadoras': '💻',
+    '📷 Fotografía': '📷',
+    '🎮 Videojuegos': '🎮',
+    'Otro': '📦'
+  };
+
+  function updatePreview() {
+    const titulo = document.getElementById('titulo').value || 'Tu producto aquí';
+    const precio = document.getElementById('precio').value || '0';
+    const ciudad = document.getElementById('ciudad').value || 'Ciudad';
+    const categoria = document.getElementById('categoria').value || 'Categoría';
+
+    document.getElementById('preview-title').textContent = titulo;
+    document.getElementById('preview-price').innerHTML = `$${precio} <span>USD</span>`;
+    document.getElementById('preview-meta').textContent = `${ciudad} · ${categoria.replace(/^[^\s]+\s/, '') || 'Categoría'}`;
+    document.getElementById('preview-emoji').textContent = emojiMap[categoria] || '📦';
+  }
+
+  function generateLink() {
+    const titulo = document.getElementById('titulo').value.trim();
+    const precio = document.getElementById('precio').value.trim();
+    const ciudad = document.getElementById('ciudad').value;
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+
+    if (!titulo) { showToast('Ingresa el nombre del producto', 'error'); return; }
+    if (!precio || precio <= 0) { showToast('Ingresa un precio válido', 'error'); return; }
+    if (!ciudad) { showToast('Selecciona tu ciudad', 'error'); return; }
+
+    // Generate shareable link
+    const params = new URLSearchParams({
+      t: titulo,
+      p: precio,
+      c: ciudad,
+      cat: document.getElementById('categoria').value,
+      w: whatsapp,
+      ref: 'social'
+    });
+
+    generatedLink = `${API}/productos/ver?${params.toString()}`;
+
+    // Update UI
+    const linkEl = document.getElementById('link-display');
+    linkEl.textContent = generatedLink;
+    linkEl.classList.add('generated');
+
+    document.getElementById('result-panel').classList.add('show');
+
+    // Update steps
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step1').querySelector('.step-num').textContent = '✓';
+    document.getElementById('step2').classList.add('active');
+
+    showToast('¡Enlace generado! Compártelo en tus redes 🚀');
+    document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function getShareText() {
+    const titulo = document.getElementById('titulo').value || 'Producto';
+    const precio = document.getElementById('precio').value || '0';
+    const ciudad = document.getElementById('ciudad').value || '';
+    return `🔒 *${titulo}* — $${precio} USD\n📍 ${ciudad}\n\n✅ Pago seguro con TrustBuy — tu dinero queda protegido hasta recibir el producto.\n\n👉 ${generatedLink}`;
+  }
+
+  function shareWhatsApp() {
+    if (!generatedLink) { showToast('Primero genera tu enlace', 'error'); return; }
+    window.open(`https://wa.me/?text=${encodeURIComponent(getShareText())}`, '_blank');
+    markStep3();
+  }
+
+  function shareFacebook() {
+    if (!generatedLink) { showToast('Primero genera tu enlace', 'error'); return; }
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generatedLink)}`, '_blank');
+    markStep3();
+  }
+
+  function shareInstagram() {
+    if (!generatedLink) { showToast('Primero genera tu enlace', 'error'); return; }
+    copyLink();
+    showToast('📋 Enlace copiado — pégalo en tu bio o historia de Instagram');
+    markStep3();
+  }
+
+  function copyLink() {
+    if (!generatedLink) { showToast('Primero genera tu enlace', 'error'); return; }
+    navigator.clipboard.writeText(generatedLink).then(() => {
+      showToast('✓ Enlace copiado al portapapeles');
+      markStep3();
+    });
+  }
+
+  function markStep3() {
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step2').classList.add('done');
+    document.getElementById('step2').querySelector('.step-num').textContent = '✓';
+    document.getElementById('step3').classList.add('active');
+  }
+
+  function downloadBadge() {
+    const svg = `<svg width="640" height="160" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="320" height="80" fill="#020b18"/>
+      <rect x="0" y="0" width="4" height="80" fill="#00c896"/>
+      <text x="20" y="28" font-family="Impact, sans-serif" font-size="18" letter-spacing="1" fill="#e8f4ff">ACEPTO</text>
+      <text x="88" y="28" font-family="Impact, sans-serif" font-size="18" letter-spacing="1" fill="#ff8c00">🔒</text>
+      <text x="108" y="28" font-family="Impact, sans-serif" font-size="18" letter-spacing="1" fill="#00c896">TRUSTBUY</text>
+      <text x="20" y="48" font-family="Arial, sans-serif" font-size="11" fill="#6a8aaa">Pago protegido hasta que recibas tu producto</text>
+      <text x="20" y="66" font-family="monospace" font-size="10" letter-spacing="1" fill="#ff8c00">trustbuy-api.onrender.com · EC.</text>
+    </svg>`;
+
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'trustbuy-badge.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✓ Badge descargado — añádelo a tus fotos');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="120" fill="#020b18" rx="16"/>
+
+  <!-- Shield -->
+  <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sg1)"/>
+
+  <!-- Arrow top: moved further up -->
+  <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+
+  <!-- Arrow bottom: moved further down -->
+  <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+
+  <!-- Checkmark: gold/amber, centered, protagonist -->
+  <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- TRUST -->
+  <text x="116" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+
+  <!-- PADLOCK connector -->
+  <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+  <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+  <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+
+  <!-- BUY -->
+  <text x="300" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+
+  <!-- Tagline -->
+  <text x="116" y="100" font-family="'Space Grotesk', Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+
+  <defs>
+    <linearGradient id="sg1" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a6fff"/>
+      <stop offset="100%" stop-color="#00c896"/>
+    </linearGradient>
+  </defs>
+</svg>
