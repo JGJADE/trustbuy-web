@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Panel Courier</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #020b18;
+    --surface: #061428;
+    --surface2: #0a1f38;
+    --blue: #1a6fff;
+    --green: #00c896;
+    --amber: #ff8c00;
+    --red: #ff4444;
+    --white: #e8f4ff;
+    --muted: #4a6080;
+    --text: #a0b4c8;
+    --cream: #F8ECE1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 30% 50%, rgba(26,111,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(0,200,150,0.05) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .login-box {
+    background: #040f20;
+    border: 1px solid rgba(26,111,255,0.2);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+
+  .login-logo {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .login-logo svg { width: 100%; height: auto; }
+
+  .login-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+
+  .login-title span { color: var(--green); }
+
+  .login-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid rgba(26,111,255,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--blue);
+  }
+
+  .form-group select option { background: var(--surface2); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: var(--amber); color: #020b18; }
+  .btn-primary:hover { background: #ff9d1a; transform: translateY(-1px); }
+  .btn-green { background: var(--green); color: #020b18; }
+  .btn-green:hover { background: #00e0aa; transform: translateY(-1px); }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-blue:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-danger { background: var(--red); color: white; }
+  .btn-danger:hover { opacity: 0.9; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text);
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; width: auto; }
+
+  /* DASHBOARD */
+  #dashboard { display: none; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 240px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid rgba(26,111,255,0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid rgba(26,111,255,0.1);
+    margin-bottom: 24px;
+  }
+
+  .sidebar-logo .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  .sidebar-logo .logo-text span { color: var(--green); }
+
+  .sidebar-logo .courier-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--amber);
+    margin-top: 4px;
+  }
+
+  .courier-info {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid rgba(26,111,255,0.1);
+    margin-bottom: 16px;
+  }
+
+  .courier-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .courier-name { font-size: 14px; font-weight: 600; color: var(--white); }
+  .courier-city { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-item:hover { color: var(--white); background: rgba(26,111,255,0.05); }
+  .nav-item.active { color: var(--amber); border-left-color: var(--amber); background: rgba(255,140,0,0.05); }
+  .nav-item .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--amber);
+    color: #020b18;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 24px;
+    border-top: 1px solid rgba(26,111,255,0.1);
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 240px;
+    padding: 32px;
+    min-height: 100vh;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 4px;
+  }
+
+  /* STATS CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid rgba(26,111,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: rgba(26,111,255,0.3); }
+
+  .stat-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.amber { color: var(--amber); }
+  .stat-value.red { color: var(--red); }
+  .stat-value.blue { color: var(--blue); }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ORDERS TABLE */
+  .section {
+    background: var(--surface);
+    border: 1px solid rgba(26,111,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .section-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(26,111,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  th {
+    padding: 12px 24px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-align: left;
+    background: rgba(0,0,0,0.2);
+  }
+
+  td {
+    padding: 16px 24px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(26,111,255,0.05);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(26,111,255,0.03); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .badge-pending { background: rgba(255,140,0,0.15); color: var(--amber); border: 1px solid rgba(255,140,0,0.3); }
+  .badge-verified { background: rgba(26,111,255,0.15); color: var(--blue); border: 1px solid rgba(26,111,255,0.3); }
+  .badge-delivered { background: rgba(0,200,150,0.15); color: var(--green); border: 1px solid rgba(0,200,150,0.3); }
+  .badge-failed { background: rgba(255,68,68,0.15); color: var(--red); border: 1px solid rgba(255,68,68,0.3); }
+
+  .order-id { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+  .product-name { font-weight: 600; color: var(--white); }
+  .amount { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--green); letter-spacing: 1px; }
+  .earning { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--amber); letter-spacing: 1px; }
+
+  .actions { display: flex; gap: 8px; align-items: center; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid rgba(26,111,255,0.2);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .modal-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  .modal-footer { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    max-width: 320px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--red); }
+  .toast.warning { border-color: var(--amber); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+  }
+
+  .empty-state .emoji { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* HISTORY FILTERS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(26,111,255,0.1);
+  }
+
+  .filter-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .filter-btn.active { background: var(--amber); border-color: var(--amber); color: #020b18; font-weight: 700; }
+  .filter-btn:hover:not(.active) { border-color: var(--amber); color: var(--amber); }
+
+  /* EARNINGS */
+  .earnings-card {
+    background: linear-gradient(135deg, rgba(0,200,150,0.1), rgba(26,111,255,0.05));
+    border: 1px solid rgba(0,200,150,0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .earnings-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--green);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .earnings-label { font-size: 13px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
+
+  .earnings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+
+  .earning-item {
+    background: var(--surface);
+    border: 1px solid rgba(26,111,255,0.1);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .earning-item .val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; }
+  .earning-item .lbl { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo" style="margin-bottom:16px; display:block; width:100%;">
+      <svg width="100%" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="120" fill="#061428" rx="16" stroke="rgba(26,111,255,0.3)" stroke-width="1"/>
+        <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgLogin)"/>
+        <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+        <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+        <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="116" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+        <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+        <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+        <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+        <text x="300" y="68" font-family="'Bebas Neue', Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+        <text x="116" y="100" font-family="'Space Grotesk', Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+        <defs>
+          <linearGradient id="sgLogin" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1a6fff"/>
+            <stop offset="100%" stop-color="#00c896"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="login-subtitle">🚚 Panel de Courier · Ecuador</div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="courier@trustbuy.ec" value="courier@trustbuy.ec"/>
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••" value="123456"/>
+    </div>
+    <div class="form-group">
+      <label>Tu ciudad</label>
+      <select id="login-city">
+        <option value="Guayaquil">Guayaquil</option>
+        <option value="Quito">Quito</option>
+        <option value="Cuenca">Cuenca</option>
+        <option value="Ambato">Ambato</option>
+        <option value="Loja">Loja</option>
+        <option value="Manta">Manta</option>
+        <option value="Latacunga">Latacunga</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">🚚 Ingresar al panel</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">TRUST<span>BUY</span></div>
+      <div class="courier-badge">🚚 Panel Courier</div>
+    </div>
+    <div class="courier-info">
+      <div class="courier-avatar" id="sidebar-avatar">C</div>
+      <div class="courier-name" id="sidebar-name">Courier</div>
+      <div class="courier-city" id="sidebar-city">📍 Ciudad</div>
+    </div>
+    <div class="nav-item active" onclick="showPage('resumen', this)">
+      <span class="nav-icon">📊</span> Resumen
+    </div>
+    <div class="nav-item" onclick="showPage('ordenes', this)">
+      <span class="nav-icon">📦</span> Órdenes Pendientes
+      <span class="nav-badge" id="pending-badge">0</span>
+    </div>
+    <div class="nav-item" onclick="showPage('historial', this)">
+      <span class="nav-icon">📋</span> Historial
+    </div>
+    <div class="nav-item" onclick="showPage('ganancias', this)">
+      <span class="nav-icon">💰</span> Ganancias
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" onclick="doLogout()">← Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- RESUMEN -->
+    <div class="page active" id="page-resumen">
+      <div class="page-header">
+        <div>
+          <div class="page-title">RESUMEN GENERAL</div>
+          <div class="page-subtitle" id="resumen-subtitle">Hoy · Todas las órdenes</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadData()">🔄 Actualizar</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Órdenes</div>
+          <div class="stat-value blue" id="stat-total">0</div>
+          <div class="stat-sub">asignadas a ti</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Entregas OK</div>
+          <div class="stat-value green" id="stat-delivered">0</div>
+          <div class="stat-sub">completadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">No Realizadas</div>
+          <div class="stat-value red" id="stat-failed">0</div>
+          <div class="stat-sub">con comentario</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pendientes</div>
+          <div class="stat-value amber" id="stat-pending">0</div>
+          <div class="stat-sub">por atender</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">ÓRDENES RECIENTES</div>
+        </div>
+        <div id="resumen-orders"></div>
+      </div>
+    </div>
+
+    <!-- ORDENES PENDIENTES -->
+    <div class="page" id="page-ordenes">
+      <div class="page-header">
+        <div>
+          <div class="page-title">ÓRDENES PENDIENTES</div>
+          <div class="page-subtitle" id="ordenes-subtitle">Tu ciudad · Esperando verificación</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📦 POR RECOGER Y VERIFICAR</div>
+        </div>
+        <div id="pending-orders-list"></div>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="page" id="page-historial">
+      <div class="page-header">
+        <div>
+          <div class="page-title">HISTORIAL DE ENTREGAS</div>
+          <div class="page-subtitle">Todas tus entregas realizadas</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="filters">
+          <button class="filter-btn active" onclick="filterHistory('all', this)">Todos</button>
+          <button class="filter-btn" onclick="filterHistory('delivered', this)">Entregados</button>
+          <button class="filter-btn" onclick="filterHistory('failed', this)">No realizados</button>
+          <button class="filter-btn" onclick="filterHistory('verified', this)">Verificados</button>
+        </div>
+        <div id="history-list"></div>
+      </div>
+    </div>
+
+    <!-- GANANCIAS -->
+    <div class="page" id="page-ganancias">
+      <div class="page-header">
+        <div>
+          <div class="page-title">MIS GANANCIAS</div>
+          <div class="page-subtitle">Comisión por entrega verificada</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:10px;padding:16px 20px;margin-bottom:16px;font-size:13px;color:var(--text);">
+  <div style="font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:8px;">ℹ️ Tu modelo de ganancias</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div>✅ <strong style="color:var(--green)">$2.00</strong> por cada verificación de producto</div>
+    <div>🚚 <strong style="color:var(--amber)">100%</strong> del costo de envío es tuyo</div>
+  </div>
+  <div style="margin-top:8px;color:var(--muted);font-size:12px;">TrustBuy te apalanca con volumen de órdenes. Tú cobras el envío directamente.</div>
+</div>
+<div class="earnings-card">
+        <div class="earnings-label">💰 Total ganado por verificaciones</div>
+        <div class="earnings-amount" id="total-earnings">$0.00</div>
+        <div class="earnings-grid">
+          <div class="earning-item">
+            <div class="val green" id="earn-delivered">0</div>
+            <div class="lbl">Entregas</div>
+          </div>
+          <div class="earning-item">
+            <div class="val amber" id="earn-rate">$2.00</div>
+            <div class="lbl">Por entrega</div>
+          </div>
+          <div class="earning-item">
+            <div class="val blue" id="earn-pending-pay">$0.00</div>
+            <div class="lbl">Por cobrar</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">💵 DETALLE POR ENTREGA</div>
+        </div>
+        <div id="earnings-detail"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL VERIFICAR -->
+<div class="modal-overlay" id="modal-verify">
+  <div class="modal">
+    <div class="modal-title">✅ VERIFICAR PRODUCTO</div>
+    <div class="modal-subtitle">Confirma que el producto está en buen estado antes de entregar</div>
+    <input type="hidden" id="verify-order-id"/>
+    <div class="form-group">
+      <label>ID de Orden</label>
+      <input type="text" id="verify-order-display" disabled/>
+    </div>
+    <div class="form-group">
+      <label>Producto</label>
+      <input type="text" id="verify-product" disabled/>
+    </div>
+    <div class="form-group">
+      <label>Comentario (opcional)</label>
+      <textarea id="verify-comment" placeholder="Todo en orden, producto verificado..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-verify')">Cancelar</button>
+      <button class="btn btn-green btn-sm" onclick="confirmVerify()">✅ Confirmar verificación</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ENTREGAR -->
+<div class="modal-overlay" id="modal-deliver">
+  <div class="modal">
+    <div class="modal-title">🏠 CONFIRMAR ENTREGA</div>
+    <div class="modal-subtitle">Confirma que el comprador recibió el producto</div>
+    <input type="hidden" id="deliver-order-id"/>
+    <div class="form-group">
+      <label>Producto</label>
+      <input type="text" id="deliver-product" disabled/>
+    </div>
+    <div class="form-group">
+      <label>Comprador</label>
+      <input type="text" id="deliver-buyer" disabled/>
+    </div>
+    <div class="form-group">
+      <label>Comentario de entrega</label>
+      <textarea id="deliver-comment" placeholder="Entregado en manos del comprador..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-deliver')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmDeliver()">📦 Confirmar entrega</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NO REALIZADO -->
+<div class="modal-overlay" id="modal-failed">
+  <div class="modal">
+    <div class="modal-title">❌ ENTREGA NO REALIZADA</div>
+    <div class="modal-subtitle">Registra el motivo por el que no se pudo entregar</div>
+    <input type="hidden" id="failed-order-id"/>
+    <div class="form-group">
+      <label>Motivo</label>
+      <select id="failed-reason">
+        <option value="Comprador no disponible">Comprador no disponible</option>
+        <option value="Dirección incorrecta">Dirección incorrecta</option>
+        <option value="Comprador rechazó el producto">Comprador rechazó el producto</option>
+        <option value="Zona de riesgo">Zona de riesgo</option>
+        <option value="Otro">Otro motivo</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Comentario detallado</label>
+      <textarea id="failed-comment" placeholder="Describe lo que ocurrió..." required></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-failed')">Cancelar</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmFailed()">❌ Registrar no entrega</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://trustbuy-api.onrender.com';
+let currentCourier = null;
+let allOrders = [];
+const COURIER_VERIFICATION_FEE = 2.00; // $2 por verificación
+const TRUSTBUY_COMMISSION_PCT = 0.05;  // 5% del producto (solo interno)
+const EARNING_PER_DELIVERY = COURIER_VERIFICATION_FEE;
+
+// MOCK DATA para demo
+const mockOrders = [
+  { id: 'ORD-001', product: 'iPhone 14 Pro', buyer: 'Carlos Mendoza', seller: 'Ana Torres', amount: 450, city: 'Guayaquil', status: 'pending', date: '2026-03-05', earning: 3.00, comment: '' },
+  { id: 'ORD-002', product: 'Laptop Dell XPS', buyer: 'María García', seller: 'Pedro López', amount: 890, city: 'Guayaquil', status: 'verified', date: '2026-03-05', earning: 3.00, comment: 'Producto verificado' },
+  { id: 'ORD-003', product: 'Nike Air Max 270', buyer: 'Luis Romero', seller: 'Sara Vega', amount: 120, city: 'Guayaquil', status: 'delivered', date: '2026-03-04', earning: 2.00, comment: 'Entregado sin novedad' },
+  { id: 'ORD-004', product: 'Samsung Galaxy S24', buyer: 'José Pinto', seller: 'Mónica Ruiz', amount: 650, city: 'Guayaquil', status: 'pending', date: '2026-03-05', earning: 3.00, comment: '' },
+  { id: 'ORD-005', product: 'Bicicleta Trek', buyer: 'Andres Castro', seller: 'Fernanda Silva', amount: 380, city: 'Guayaquil', status: 'failed', date: '2026-03-03', earning: 0, comment: 'Comprador no disponible' },
+  { id: 'ORD-006', product: 'PlayStation 5', buyer: 'Diego Mora', seller: 'Patricia León', amount: 520, city: 'Guayaquil', status: 'delivered', date: '2026-03-03', earning: 2.00, comment: 'Entregado en manos del comprador' },
+];
+
+function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const city = document.getElementById('login-city').value;
+  if (!email) { showToast('⚠️ Ingresa tu email', 'warning'); return; }
+  
+  currentCourier = { email, city, name: email.split('@')[0] };
+  
+  document.getElementById('sidebar-avatar').textContent = currentCourier.name[0].toUpperCase();
+  document.getElementById('sidebar-name').textContent = currentCourier.name;
+  document.getElementById('sidebar-city').textContent = '📍 ' + city;
+  document.getElementById('ordenes-subtitle').textContent = city + ' · Esperando verificación';
+  document.getElementById('resumen-subtitle').textContent = 'Hoy · ' + city;
+  
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  
+  // Filter orders by city
+  allOrders = mockOrders.filter(o => o.city === city);
+  loadData();
+  showToast('✅ Bienvenido, ' + currentCourier.name + '!');
+}
+
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  currentCourier = null;
+}
+
+function loadData() {
+  updateStats();
+  renderResumen();
+  renderPending();
+  renderHistory('all');
+  renderEarnings();
+}
+
+function updateStats() {
+  const total = allOrders.length;
+  const delivered = allOrders.filter(o => o.status === 'delivered').length;
+  const failed = allOrders.filter(o => o.status === 'failed').length;
+  const pending = allOrders.filter(o => o.status === 'pending' || o.status === 'verified').length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-delivered').textContent = delivered;
+  document.getElementById('stat-failed').textContent = failed;
+  document.getElementById('stat-pending').textContent = pending;
+  document.getElementById('pending-badge').textContent = pending;
+}
+
+function statusBadge(status) {
+  const map = {
+    pending: '<span class="badge badge-pending">⏳ Pendiente</span>',
+    verified: '<span class="badge badge-verified">🔍 Verificado</span>',
+    delivered: '<span class="badge badge-delivered">✅ Entregado</span>',
+    failed: '<span class="badge badge-failed">❌ No realizado</span>',
+  };
+  return map[status] || status;
+}
+
+function renderResumen() {
+  const recent = [...allOrders].slice(0, 5);
+  const el = document.getElementById('resumen-orders');
+  if (!recent.length) { el.innerHTML = '<div class="empty-state"><div class="emoji">📦</div><p>No hay órdenes asignadas</p></div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr><th>Orden</th><th>Producto</th><th>Comprador</th><th>Monto</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>${recent.map(o => `<tr>
+      <td><div class="order-id">#${o.id}</div></td>
+      <td><div class="product-name">${o.product}</div></td>
+      <td>${o.buyer}</td>
+      <td><div class="amount">$${o.amount}</div></td>
+      <td>${statusBadge(o.status)}</td>
+      <td><div class="actions">${actionBtns(o)}</div></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function renderPending() {
+  const pending = allOrders.filter(o => o.status === 'pending' || o.status === 'verified');
+  const el = document.getElementById('pending-orders-list');
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="emoji">🎉</div><p>¡No hay órdenes pendientes! Estás al día.</p></div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr><th>Orden</th><th>Producto</th><th>Vendedor</th><th>Comprador</th><th>Monto</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>${pending.map(o => `<tr>
+      <td><div class="order-id">#${o.id}</div><div style="font-size:11px;color:var(--muted)">${o.date}</div></td>
+      <td><div class="product-name">${o.product}</div></td>
+      <td>${o.seller}</td>
+      <td>${o.buyer}</td>
+      <td><div class="amount">$${o.amount}</div><div class="earning">+$${EARNING_PER_DELIVERY.toFixed(2)}</div></td>
+      <td>${statusBadge(o.status)}</td>
+      <td><div class="actions">${actionBtns(o)}</div></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function actionBtns(o) {
+  if (o.status === 'pending') return `
+    <button class="btn btn-blue btn-sm" onclick="openVerify('${o.id}')">🔍 Verificar</button>
+    <button class="btn btn-danger btn-sm" onclick="openFailed('${o.id}')">❌</button>`;
+  if (o.status === 'verified') return `
+    <button class="btn btn-primary btn-sm" onclick="openDeliver('${o.id}')">📦 Entregar</button>
+    <button class="btn btn-danger btn-sm" onclick="openFailed('${o.id}')">❌</button>`;
+  if (o.status === 'delivered') return `<span style="color:var(--green);font-size:13px">✅ Completado</span>`;
+  if (o.status === 'failed') return `<span style="color:var(--red);font-size:13px">❌ No realizado</span>`;
+  return '';
+}
+
+function renderHistory(filter) {
+  let orders = [...allOrders];
+  if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+  const el = document.getElementById('history-list');
+  if (!orders.length) { el.innerHTML = '<div class="empty-state"><div class="emoji">📋</div><p>No hay registros con este filtro</p></div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr><th>Orden</th><th>Producto</th><th>Comprador</th><th>Monto</th><th>Ganancia</th><th>Estado</th><th>Comentario</th></tr></thead>
+    <tbody>${orders.map(o => `<tr>
+      <td><div class="order-id">#${o.id}</div><div style="font-size:11px;color:var(--muted)">${o.date}</div></td>
+      <td><div class="product-name">${o.product}</div></td>
+      <td>${o.buyer}</td>
+      <td><div class="amount">$${o.amount}</div></td>
+      <td><div class="earning">${o.earning > 0 ? '+$'+o.earning.toFixed(2) : '—'}</div></td>
+      <td>${statusBadge(o.status)}</td>
+      <td style="font-size:12px;color:var(--muted);max-width:180px">${o.comment || '—'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function renderEarnings() {
+  const delivered = allOrders.filter(o => o.status === 'delivered');
+  const total = delivered.length * EARNING_PER_DELIVERY;
+  const pending = allOrders.filter(o => o.status === 'verified').length * EARNING_PER_DELIVERY;
+
+  document.getElementById('total-earnings').textContent = '$' + total.toFixed(2);
+  document.getElementById('earn-delivered').textContent = delivered.length;
+  document.getElementById('earn-pending-pay').textContent = '$' + pending.toFixed(2);
+
+  const el = document.getElementById('earnings-detail');
+  if (!delivered.length) { el.innerHTML = '<div class="empty-state"><div class="emoji">💰</div><p>Aún no tienes entregas completadas</p></div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr><th>Orden</th><th>Producto</th><th>Comprador</th><th>Monto venta</th><th>Tu ganancia</th><th>Fecha</th></tr></thead>
+    <tbody>${delivered.map(o => `<tr>
+      <td><div class="order-id">#${o.id}</div></td>
+      <td><div class="product-name">${o.product}</div></td>
+      <td>${o.buyer}</td>
+      <td><div class="amount">$${o.amount}</div></td>
+      <td><div class="earning">+$${EARNING_PER_DELIVERY.toFixed(2)}</div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">${o.date}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function filterHistory(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory(filter);
+}
+
+// MODALS
+function openVerify(id) {
+  const o = allOrders.find(x => x.id === id);
+  document.getElementById('verify-order-id').value = id;
+  document.getElementById('verify-order-display').value = '#' + id;
+  document.getElementById('verify-product').value = o.product;
+  document.getElementById('verify-comment').value = '';
+  document.getElementById('modal-verify').classList.add('open');
+}
+
+function confirmVerify() {
+  const id = document.getElementById('verify-order-id').value;
+  const comment = document.getElementById('verify-comment').value || 'Producto verificado';
+  const o = allOrders.find(x => x.id === id);
+  o.status = 'verified';
+  o.comment = comment;
+  closeModal('modal-verify');
+  loadData();
+  showToast('✅ Producto verificado correctamente');
+}
+
+function openDeliver(id) {
+  const o = allOrders.find(x => x.id === id);
+  document.getElementById('deliver-order-id').value = id;
+  document.getElementById('deliver-product').value = o.product;
+  document.getElementById('deliver-buyer').value = o.buyer;
+  document.getElementById('deliver-comment').value = '';
+  document.getElementById('modal-deliver').classList.add('open');
+}
+
+function confirmDeliver() {
+  const id = document.getElementById('deliver-order-id').value;
+  const comment = document.getElementById('deliver-comment').value || 'Entregado correctamente';
+  const o = allOrders.find(x => x.id === id);
+  o.status = 'delivered';
+  o.comment = comment;
+  o.earning = EARNING_PER_DELIVERY;
+  closeModal('modal-deliver');
+  loadData();
+  showToast('📦 Entrega confirmada — ¡ganaste $' + EARNING_PER_DELIVERY.toFixed(2) + '!');
+}
+
+function openFailed(id) {
+  const o = allOrders.find(x => x.id === id);
+  document.getElementById('failed-order-id').value = id;
+  document.getElementById('failed-comment').value = '';
+  document.getElementById('modal-failed').classList.add('open');
+}
+
+function confirmFailed() {
+  const id = document.getElementById('failed-order-id').value;
+  const reason = document.getElementById('failed-reason').value;
+  const comment = document.getElementById('failed-comment').value;
+  if (!comment.trim()) { showToast('⚠️ Debes ingresar un comentario', 'warning'); return; }
+  const o = allOrders.find(x => x.id === id);
+  o.status = 'failed';
+  o.comment = reason + ': ' + comment;
+  o.earning = 0;
+  closeModal('modal-failed');
+  loadData();
+  showToast('❌ Entrega no realizada registrada', 'error');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
