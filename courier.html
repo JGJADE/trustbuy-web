@@ -7,24 +7,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #020b18;
-    --surface: #061428;
-    --surface2: #0a1f38;
+    --bg: #F8ECE1;
+    --surface: #ffffff;
+    --surface2: #f0e4d4;
     --blue: #1a6fff;
-    --green: #00c896;
-    --amber: #ff8c00;
-    --red: #ff4444;
-    --white: #e8f4ff;
-    --muted: #4a6080;
-    --text: #a0b4c8;
+    --green: #00a87a;
+    --amber: #e07800;
+    --red: #d63030;
+    --white: #0a1628;
+    --muted: #7a6a5a;
+    --text: #3a2e24;
     --cream: #F8ECE1;
+    --border: rgba(180,140,100,0.25);
+    --shadow: 0 2px 12px rgba(100,60,20,0.08);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
+    background: #F8ECE1;
     color: var(--white);
     min-height: 100vh;
   }
@@ -35,9 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(ellipse at 30% 50%, rgba(26,111,255,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(0,200,150,0.05) 0%, transparent 50%),
-                var(--bg);
+    background: #F8ECE1;
   }
 
   .login-box {
@@ -67,7 +67,7 @@
 
   .login-subtitle {
     font-size: 13px;
-    color: var(--muted);
+    color: #9a7a60;
     margin-bottom: 32px;
     font-family: 'DM Mono', monospace;
     text-transform: uppercase;
@@ -82,17 +82,17 @@
     font-family: 'DM Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--muted);
+    color: #7a5a40;
     margin-bottom: 8px;
   }
 
   .form-group input, .form-group select, .form-group textarea {
     width: 100%;
-    background: var(--surface2);
-    border: 1px solid rgba(26,111,255,0.2);
+    background: #fdf7f0;
+    border: 1.5px solid rgba(180,140,100,0.3);
     border-radius: 8px;
     padding: 12px 16px;
-    color: var(--white);
+    color: #1a0e08;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
     outline: none;
@@ -101,9 +101,10 @@
 
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     border-color: var(--blue);
+    background: #ffffff;
   }
 
-  .form-group select option { background: var(--surface2); }
+  .form-group select option { background: #fdf7f0; color: #1a0e08; }
   .form-group textarea { resize: vertical; min-height: 80px; }
 
   .btn {
@@ -128,8 +129,8 @@
   .btn-danger:hover { opacity: 0.9; }
   .btn-ghost {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #ffffff;
     width: auto;
     padding: 8px 16px;
     font-size: 13px;
@@ -146,8 +147,8 @@
     left: 0; top: 0;
     width: 240px;
     height: 100vh;
-    background: var(--surface);
-    border-right: 1px solid rgba(26,111,255,0.1);
+    background: #020b18;
+    border-right: 1px solid rgba(26,111,255,0.15);
     display: flex;
     flex-direction: column;
     padding: 24px 0;
@@ -156,7 +157,7 @@
 
   .sidebar-logo {
     padding: 0 24px 24px;
-    border-bottom: 1px solid rgba(26,111,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     margin-bottom: 24px;
   }
 
@@ -179,7 +180,7 @@
 
   .courier-info {
     padding: 0 24px 24px;
-    border-bottom: 1px solid rgba(26,111,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     margin-bottom: 16px;
   }
 
@@ -192,15 +193,15 @@
     margin-bottom: 8px;
   }
 
-  .courier-name { font-size: 14px; font-weight: 600; color: var(--white); }
-  .courier-city { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .courier-name { font-size: 14px; font-weight: 600; color: #e8f4ff; }
+  .courier-city { font-size: 12px; color: #6a8aaa; font-family: 'DM Mono', monospace; }
 
   .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 10px 24px;
-    color: var(--text);
+    color: #7a9abb;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 14px;
@@ -208,8 +209,8 @@
     border-left: 3px solid transparent;
   }
 
-  .nav-item:hover { color: var(--white); background: rgba(26,111,255,0.05); }
-  .nav-item.active { color: var(--amber); border-left-color: var(--amber); background: rgba(255,140,0,0.05); }
+  .nav-item:hover { color: #e8f4ff; background: rgba(26,111,255,0.08); }
+  .nav-item.active { color: #ff8c00; border-left-color: #ff8c00; background: rgba(255,140,0,0.08); }
   .nav-item .nav-icon { font-size: 18px; width: 20px; text-align: center; }
   .nav-badge {
     margin-left: auto;
@@ -225,7 +226,7 @@
   .sidebar-footer {
     margin-top: auto;
     padding: 16px 24px;
-    border-top: 1px solid rgba(26,111,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
 
   /* MAIN CONTENT */
@@ -233,6 +234,8 @@
     margin-left: 240px;
     padding: 32px;
     min-height: 100vh;
+    background: #F8ECE1;
+    color: var(--bg);
   }
 
   .page { display: none; }
@@ -249,11 +252,12 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 36px;
     letter-spacing: 2px;
+    color: #1a0e08;
   }
 
   .page-subtitle {
     font-size: 13px;
-    color: var(--muted);
+    color: #9a7a60;
     font-family: 'DM Mono', monospace;
     margin-top: 4px;
   }
@@ -267,21 +271,22 @@
   }
 
   .stat-card {
-    background: var(--surface);
-    border: 1px solid rgba(26,111,255,0.1);
+    background: #ffffff;
+    border: 1px solid rgba(180,140,100,0.2);
     border-radius: 12px;
     padding: 20px;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
   }
 
-  .stat-card:hover { border-color: rgba(26,111,255,0.3); }
+  .stat-card:hover { border-color: var(--blue); box-shadow: 0 4px 20px rgba(26,111,255,0.1); }
 
   .stat-label {
     font-size: 10px;
     font-family: 'DM Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--muted);
+    color: #9a7a60;
     margin-bottom: 8px;
   }
 
@@ -299,14 +304,15 @@
 
   .stat-sub {
     font-size: 12px;
-    color: var(--muted);
+    color: #9a7a60;
     margin-top: 4px;
   }
 
   /* ORDERS TABLE */
   .section {
-    background: var(--surface);
-    border: 1px solid rgba(26,111,255,0.1);
+    background: #ffffff;
+    border: 1px solid rgba(180,140,100,0.2);
+    box-shadow: var(--shadow);
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 24px;
@@ -314,7 +320,7 @@
 
   .section-header {
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(26,111,255,0.1);
+    border-bottom: 1px solid rgba(180,140,100,0.15);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -324,6 +330,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
     letter-spacing: 1px;
+    color: #1a0e08;
   }
 
   table { width: 100%; border-collapse: collapse; }
@@ -334,20 +341,21 @@
     font-family: 'DM Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--muted);
+    color: #9a7a60;
     text-align: left;
-    background: rgba(0,0,0,0.2);
+    background: #faf4ec;
   }
 
   td {
     padding: 16px 24px;
     font-size: 14px;
-    border-bottom: 1px solid rgba(26,111,255,0.05);
+    color: #2a1e14;
+    border-bottom: 1px solid rgba(180,140,100,0.12);
     vertical-align: middle;
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(26,111,255,0.03); }
+  tr:hover td { background: #fdf7f0; }
 
   .badge {
     display: inline-flex;
@@ -366,8 +374,8 @@
   .badge-delivered { background: rgba(0,200,150,0.15); color: var(--green); border: 1px solid rgba(0,200,150,0.3); }
   .badge-failed { background: rgba(255,68,68,0.15); color: var(--red); border: 1px solid rgba(255,68,68,0.3); }
 
-  .order-id { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
-  .product-name { font-weight: 600; color: var(--white); }
+  .order-id { font-family: 'DM Mono', monospace; font-size: 12px; color: #9a7a60; }
+  .product-name { font-weight: 600; color: #1a0e08; }
   .amount { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--green); letter-spacing: 1px; }
   .earning { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--amber); letter-spacing: 1px; }
 
@@ -387,8 +395,8 @@
   .modal-overlay.open { display: flex; }
 
   .modal {
-    background: var(--surface);
-    border: 1px solid rgba(26,111,255,0.2);
+    background: #ffffff;
+    border: 1px solid rgba(180,140,100,0.25);
     border-radius: 16px;
     padding: 32px;
     width: 100%;
@@ -409,7 +417,7 @@
     margin-bottom: 8px;
   }
 
-  .modal-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .modal-subtitle { font-size: 13px; color: #9a7a60; margin-bottom: 24px; }
 
   .modal-footer { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 
@@ -417,8 +425,9 @@
   .toast {
     position: fixed;
     bottom: 24px; right: 24px;
-    background: var(--surface);
-    border: 1px solid var(--green);
+    background: #ffffff;
+    color: #1a0e08;
+    border: 1.5px solid var(--green);
     border-radius: 8px;
     padding: 14px 20px;
     font-size: 14px;
@@ -440,7 +449,7 @@
   .empty-state {
     text-align: center;
     padding: 48px;
-    color: var(--muted);
+    color: #9a7a60;
   }
 
   .empty-state .emoji { font-size: 40px; margin-bottom: 12px; }
@@ -451,15 +460,16 @@
     display: flex;
     gap: 8px;
     padding: 16px 24px;
-    border-bottom: 1px solid rgba(26,111,255,0.1);
+    border-bottom: 1px solid rgba(180,140,100,0.15);
+    background: #faf4ec;
   }
 
   .filter-btn {
     padding: 6px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(180,140,100,0.3);
     background: transparent;
-    color: var(--text);
+    color: #5a3e28;
     font-size: 12px;
     font-family: 'DM Mono', monospace;
     cursor: pointer;
@@ -469,12 +479,12 @@
   }
 
   .filter-btn.active { background: var(--amber); border-color: var(--amber); color: #020b18; font-weight: 700; }
-  .filter-btn:hover:not(.active) { border-color: var(--amber); color: var(--amber); }
+  .filter-btn:hover:not(.active) { border-color: var(--amber); color: var(--amber); background: rgba(224,120,0,0.05); }
 
   /* EARNINGS */
   .earnings-card {
-    background: linear-gradient(135deg, rgba(0,200,150,0.1), rgba(26,111,255,0.05));
-    border: 1px solid rgba(0,200,150,0.2);
+    background: linear-gradient(135deg, rgba(0,168,122,0.08), rgba(26,111,255,0.04));
+    border: 1px solid rgba(0,168,122,0.2);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 16px;
@@ -488,20 +498,20 @@
     line-height: 1;
   }
 
-  .earnings-label { font-size: 13px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
+  .earnings-label { font-size: 13px; color: #7a5a40; font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
 
   .earnings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
 
   .earning-item {
-    background: var(--surface);
-    border: 1px solid rgba(26,111,255,0.1);
+    background: #ffffff;
+    border: 1px solid rgba(180,140,100,0.2);
     border-radius: 8px;
     padding: 16px;
     text-align: center;
   }
 
   .earning-item .val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; }
-  .earning-item .lbl { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
+  .earning-item .lbl { font-size: 11px; color: #9a7a60; font-family: 'DM Mono', monospace; text-transform: uppercase; margin-top: 4px; }
 
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 6px; }
@@ -566,8 +576,27 @@
 <div id="dashboard">
   <div class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-text">TRUST<span>BUY</span></div>
-      <div class="courier-badge">🚚 Panel Courier</div>
+      <svg width="100%" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="120" fill="#020b18" rx="16"/>
+        <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgSide2)"/>
+        <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+        <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+        <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="116" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+        <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+        <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+        <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+        <text x="300" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+        <text x="116" y="100" font-family="Space Grotesk, Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE - EC.</text>
+        <defs>
+          <linearGradient id="sgSide2" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1a6fff"/>
+            <stop offset="100%" stop-color="#00c896"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="courier-badge" style="margin-top:8px">🚚 Panel Courier</div>
     </div>
     <div class="courier-info">
       <div class="courier-avatar" id="sidebar-avatar">C</div>
