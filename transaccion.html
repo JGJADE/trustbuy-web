@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Transacción Segura</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --cream: #F8ECE1;
+  --cream2: #f0e4d4;
+  --cream3: #fdf7f0;
+  --navy: #020b18;
+  --blue: #1a6fff;
+  --green: #00a87a;
+  --amber: #e07800;
+  --red: #d63030;
+  --text: #1a0e08;
+  --muted: #9a7a60;
+  --border: rgba(180,140,100,0.25);
+  --shadow: 0 4px 24px rgba(100,60,20,0.10);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: var(--navy);
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo svg { width: 140px; height: 42px; }
+.nav-actions { display: flex; gap: 16px; align-items: center; }
+.nav-user { color: #a0b4c8; font-size: 13px; font-family: 'DM Mono', monospace; }
+.nav-back { color: #a0b4c8; font-size: 13px; font-family: 'DM Mono', monospace; text-decoration: none; transition: color 0.2s; }
+.nav-back:hover { color: #e8f4ff; }
+
+/* LAYOUT */
+.page { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+/* ROLE SWITCHER (demo) */
+.role-switcher {
+  display: flex;
+  gap: 10px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 28px;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+.role-switcher span { font-size: 13px; color: var(--muted); font-family: 'DM Mono', monospace; margin-right: 8px; }
+.role-btn {
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--muted);
+}
+.role-btn.active { background: var(--navy); border-color: var(--navy); color: white; }
+
+/* GRID */
+.grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; }
+@media(max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+/* CARD */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  color: var(--navy);
+}
+.card-body { padding: 24px; }
+
+/* PRODUCT INFO */
+.product-block {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  background: var(--cream3);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.product-img {
+  width: 80px; height: 80px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e8d5c0, #c8b09a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+.product-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.product-info .price { font-size: 22px; font-weight: 800; color: var(--amber); font-family: 'DM Mono', monospace; }
+.product-info .meta { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 4px; }
+
+/* TIMELINE */
+.timeline { padding: 20px 0; }
+.tl-step {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  padding-bottom: 24px;
+}
+.tl-step:last-child { padding-bottom: 0; }
+.tl-step::before {
+  content: '';
+  position: absolute;
+  left: 17px; top: 36px;
+  width: 2px; bottom: 0;
+  background: var(--border);
+}
+.tl-step:last-child::before { display: none; }
+.tl-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  background: white;
+  position: relative; z-index: 1;
+  transition: all 0.3s;
+}
+.tl-dot.done { background: var(--green); border-color: var(--green); }
+.tl-dot.active { background: var(--amber); border-color: var(--amber); animation: pulse 2s infinite; }
+.tl-dot.pending { background: var(--cream2); }
+
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(224,120,0,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(224,120,0,0); }
+}
+
+.tl-content { padding-top: 6px; }
+.tl-label { font-size: 14px; font-weight: 600; }
+.tl-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tl-time { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 4px; }
+
+/* PAYMENT METHODS */
+.pay-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.pay-method {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pay-method:hover { border-color: var(--amber); background: rgba(224,120,0,0.03); }
+.pay-method.selected { border-color: var(--amber); background: rgba(224,120,0,0.06); }
+.pay-method input[type="radio"] { accent-color: var(--amber); width: 16px; height: 16px; }
+.pay-icon { font-size: 22px; }
+.pay-info strong { font-size: 14px; font-weight: 600; display: block; }
+.pay-info small { font-size: 12px; color: var(--muted); }
+
+/* TRANSFER DETAILS */
+.transfer-box {
+  background: var(--cream3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: none;
+}
+.transfer-box.show { display: block; }
+.transfer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.transfer-row:last-child { border-bottom: none; }
+.transfer-row .label { color: var(--muted); }
+.transfer-row .value { font-family: 'DM Mono', monospace; font-weight: 600; font-size: 13px; }
+.copy-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; padding: 2px 6px; border-radius: 4px;
+  transition: background 0.2s;
+}
+.copy-btn:hover { background: var(--cream2); }
+
+/* COST BREAKDOWN */
+.breakdown {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; font-size: 16px; background: var(--cream3); }
+.breakdown-row .lbl { color: var(--muted); }
+.breakdown-row.total .lbl { color: var(--text); }
+
+/* UPLOAD PROOF */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+}
+.upload-area:hover { border-color: var(--amber); background: rgba(224,120,0,0.03); }
+.upload-area.has-file { border-color: var(--green); background: rgba(0,168,122,0.04); }
+.upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-text { font-size: 13px; color: var(--muted); }
+.upload-text strong { color: var(--amber); }
+
+/* SUMMARY CARD */
+.summary-card { position: sticky; top: 88px; }
+
+.trust-badge {
+  background: linear-gradient(135deg, var(--navy), #1a3a5c);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 16px;
+}
+.trust-badge h4 { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; margin-bottom: 12px; color: #e8f4ff; }
+.trust-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; font-size: 13px; line-height: 1.4; }
+.trust-item:last-child { margin-bottom: 0; }
+.trust-item span:first-child { font-size: 16px; flex-shrink: 0; }
+
+.amount-display {
+  background: var(--cream3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.amount-label { font-size: 11px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+.amount-value { font-size: 38px; font-weight: 800; color: var(--navy); font-family: 'DM Mono', monospace; }
+.amount-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* BUTTONS */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary { background: var(--amber); color: white; }
+.btn-primary:hover { background: #c86a00; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(224,120,0,0.3); }
+.btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-danger { background: transparent; border: 1.5px solid var(--red); color: var(--red); margin-top: 10px; }
+.btn-danger:hover { background: var(--red); color: white; }
+.btn-success { background: var(--green); color: white; }
+.btn-success:hover { background: #008f67; transform: translateY(-1px); }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+.btn + .btn { margin-top: 10px; }
+
+/* STATUS BADGE */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-family: 'DM Mono', monospace; font-weight: 500;
+}
+.status-badge.pending { background: rgba(224,120,0,0.1); color: var(--amber); }
+.status-badge.paid { background: rgba(26,111,255,0.1); color: var(--blue); }
+.status-badge.verified { background: rgba(0,168,122,0.1); color: var(--green); }
+.status-badge.in-escrow { background: rgba(26,111,255,0.08); color: var(--blue); }
+.status-badge.completed { background: rgba(0,168,122,0.12); color: var(--green); }
+.status-badge.disputed { background: rgba(214,48,48,0.1); color: var(--red); }
+
+/* SELLER VIEW SPECIFIC */
+.seller-actions { display: flex; flex-direction: column; gap: 10px; }
+.info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.info-row:last-child { border-bottom: none; }
+.info-row .lbl { color: var(--muted); }
+.info-row .val { font-weight: 600; font-family: 'DM Mono', monospace; font-size: 13px; }
+
+/* PROOF IMAGE */
+.proof-preview {
+  background: var(--cream3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.proof-preview .icon { font-size: 36px; margin-bottom: 8px; }
+.proof-preview p { font-size: 13px; color: var(--muted); }
+
+/* DISPUTE MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 1000;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white; border-radius: 16px; padding: 32px;
+  width: 100%; max-width: 420px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+  animation: modalIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn { from { transform: scale(0.9); opacity:0; } to { transform: scale(1); opacity:1; } }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing:1.5px; color: var(--red); margin-bottom:8px; }
+.modal-sub { font-size: 13px; color: var(--muted); margin-bottom:20px; line-height:1.5; }
+textarea {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 12px; font-family: 'Outfit', sans-serif; font-size: 14px;
+  color: var(--text); background: var(--cream3); outline: none;
+  resize: vertical; min-height: 100px; transition: border-color 0.2s;
+}
+textarea:focus { border-color: var(--red); }
+.modal-footer { display: flex; gap: 10px; margin-top: 16px; }
+.modal-footer .btn { flex:1; padding:12px; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: white; border: 1.5px solid var(--green);
+  border-radius: 10px; padding: 14px 20px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  z-index: 9999; transform: translateY(80px); opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 8px 24px rgba(100,60,20,0.12); max-width: 300px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--red); }
+.toast.warning { border-color: var(--amber); }
+
+/* COMPLETE STATE */
+.complete-screen {
+  text-align: center; padding: 48px 24px;
+  display: none;
+}
+.complete-screen.show { display: block; }
+.complete-icon { font-size: 64px; margin-bottom: 16px; animation: bounceIn 0.6s; }
+@keyframes bounceIn { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.complete-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--green); margin-bottom: 8px; }
+.complete-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+.file-input { display: none; }
+
+/* Section title */
+.section-label {
+  font-size: 11px; font-family: 'DM Mono', monospace;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); margin-bottom: 10px; margin-top: 20px;
+  font-weight: 500;
+}
+.section-label:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="140" height="42" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="120" fill="#020b18" rx="0"/>
+      <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgTx)"/>
+      <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="108" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+      <path d="M263 47 L263 38 Q270 29 277 38 L277 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="258" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+      <circle cx="270" cy="55" r="3.5" fill="#020b18"/>
+      <rect x="268.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+      <text x="292" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+      <defs>
+        <linearGradient id="sgTx" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a6fff"/>
+          <stop offset="100%" stop-color="#00c896"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="nav-actions">
+    <span class="nav-user" id="nav-user">👤 Demo</span>
+    <a href="index.html" class="nav-back">← Inicio</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ROLE SWITCHER (demo) -->
+  <div class="role-switcher">
+    <span>Vista demo:</span>
+    <button class="role-btn active" onclick="setRole('buyer')" id="btn-buyer">🛒 Comprador</button>
+    <button class="role-btn" onclick="setRole('seller')" id="btn-seller">🏪 Vendedor</button>
+  </div>
+
+  <!-- ===================== BUYER VIEW ===================== -->
+  <div id="view-buyer">
+    <div class="grid">
+      <!-- LEFT: Payment flow -->
+      <div>
+        <!-- Product -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header">
+            <div class="card-title">DETALLE DEL PRODUCTO</div>
+            <span class="status-badge pending" id="buyer-status-badge">● Pendiente de pago</span>
+          </div>
+          <div class="card-body">
+            <div class="product-block">
+              <div class="product-img">📱</div>
+              <div class="product-info">
+                <h3>iPhone 13 Pro 128GB — Grafito</h3>
+                <div class="price">$420.00</div>
+                <div class="meta">Vendedor: Carlos M. ⭐ 4.8 · Quito → Guayaquil</div>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="section-label">Estado del proceso</div>
+            <div class="timeline" id="buyer-timeline">
+              <div class="tl-step">
+                <div class="tl-dot active" id="tl-1">💳</div>
+                <div class="tl-content">
+                  <div class="tl-label">Pago en custodia</div>
+                  <div class="tl-sub">Tu pago queda retenido hasta verificar el producto</div>
+                  <div class="tl-time" id="tl-time-1">— Pendiente</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot pending" id="tl-2">📦</div>
+                <div class="tl-content">
+                  <div class="tl-label">Courier recoge y verifica</div>
+                  <div class="tl-sub">El courier inspecciona el producto con el vendedor</div>
+                  <div class="tl-time" id="tl-time-2">— En espera</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot pending" id="tl-3">🚚</div>
+                <div class="tl-content">
+                  <div class="tl-label">En camino</div>
+                  <div class="tl-sub">El producto va hacia ti</div>
+                  <div class="tl-time" id="tl-time-3">— En espera</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot pending" id="tl-4">✅</div>
+                <div class="tl-content">
+                  <div class="tl-label">Entregado — Pago liberado</div>
+                  <div class="tl-sub">Confirmas recepción y el vendedor recibe el dinero</div>
+                  <div class="tl-time" id="tl-time-4">— En espera</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment step -->
+        <div class="card" id="payment-card">
+          <div class="card-header">
+            <div class="card-title">REALIZAR PAGO</div>
+          </div>
+          <div class="card-body">
+            <div class="section-label">Método de pago</div>
+            <div class="pay-methods">
+              <label class="pay-method selected" onclick="selectPay('transfer')">
+                <input type="radio" name="pay" value="transfer" checked/>
+                <span class="pay-icon">🏦</span>
+                <div class="pay-info">
+                  <strong>Transferencia bancaria</strong>
+                  <small>Banco Pichincha, Produbanco, Banco Guayaquil</small>
+                </div>
+              </label>
+              <label class="pay-method" onclick="selectPay('cash')">
+                <input type="radio" name="pay" value="cash"/>
+                <span class="pay-icon">💵</span>
+                <div class="pay-info">
+                  <strong>Efectivo al courier</strong>
+                  <small>Pagas en mano al courier cuando entrega</small>
+                </div>
+              </label>
+              <label class="pay-method" onclick="selectPay('mobile')">
+                <input type="radio" name="pay" value="mobile"/>
+                <span class="pay-icon">📲</span>
+                <div class="pay-info">
+                  <strong>Depósito móvil</strong>
+                  <small>Billpocket, DeUna u otra billetera digital</small>
+                </div>
+              </label>
+            </div>
+
+            <!-- Transfer details -->
+            <div class="transfer-box show" id="transfer-details">
+              <div class="section-label" style="margin-top:0">Datos para transferencia</div>
+              <div class="transfer-row">
+                <span class="label">Banco</span>
+                <span class="value">Banco Pichincha</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">Tipo de cuenta</span>
+                <span class="value">Ahorros</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">N° de cuenta</span>
+                <span class="value">2200847691 <button class="copy-btn" onclick="copyText('2200847691')">📋</button></span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">Titular</span>
+                <span class="value">TrustBuy S.A.S</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">RUC</span>
+                <span class="value">1791234567001</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">Monto exacto</span>
+                <span class="value" style="color:var(--amber)">$448.10</span>
+              </div>
+            </div>
+
+            <!-- Cash details -->
+            <div class="transfer-box" id="cash-details">
+              <div class="section-label" style="margin-top:0">Pago en efectivo</div>
+              <div class="transfer-row">
+                <span class="label">Monto a preparar</span>
+                <span class="value" style="color:var(--amber)">$448.10</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">Cuándo pagar</span>
+                <span class="value">Al recibir el producto</span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">A quién pagar</span>
+                <span class="value">Al courier TrustBuy</span>
+              </div>
+            </div>
+
+            <!-- Mobile details -->
+            <div class="transfer-box" id="mobile-details">
+              <div class="section-label" style="margin-top:0">Datos para depósito móvil</div>
+              <div class="transfer-row">
+                <span class="label">Número</span>
+                <span class="value">0999-TRUSTBUY <button class="copy-btn" onclick="copyText('0999878782')">📋</button></span>
+              </div>
+              <div class="transfer-row">
+                <span class="label">Monto exacto</span>
+                <span class="value" style="color:var(--amber)">$448.10</span>
+              </div>
+            </div>
+
+            <!-- Upload proof -->
+            <div id="upload-section">
+              <div class="section-label">Comprobante de pago</div>
+              <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                <div class="upload-icon" id="upload-icon">📎</div>
+                <div class="upload-text" id="upload-text">
+                  <strong>Haz clic para subir</strong> o arrastra tu comprobante<br>
+                  JPG, PNG o PDF — máx. 5MB
+                </div>
+              </div>
+              <input type="file" class="file-input" id="file-input" accept="image/*,.pdf" onchange="handleFile(this)"/>
+            </div>
+
+            <button class="btn btn-primary" id="btn-pay" onclick="confirmPayment()" disabled>
+              🔒 Confirmar pago y asegurar en custodia
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirm receipt card (shown after delivery) -->
+        <div class="card" id="confirm-card" style="display:none; margin-top:20px">
+          <div class="card-header">
+            <div class="card-title">¿RECIBISTE EL PRODUCTO?</div>
+            <span class="status-badge in-escrow">● En custodia</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:14px; color:var(--muted); margin-bottom:20px; line-height:1.6">
+              El courier ha entregado el producto. Verifica que todo esté en orden antes de liberar el pago al vendedor.
+            </p>
+            <div class="proof-preview">
+              <div class="icon">📦</div>
+              <p>El courier confirmó la entrega a las <strong>14:35</strong></p>
+            </div>
+            <button class="btn btn-success" onclick="confirmReceipt()">✅ Confirmar recepción — Liberar pago</button>
+            <button class="btn btn-danger" onclick="openDispute()">⚠️ Reportar problema</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Summary -->
+      <div class="summary-card">
+        <div class="amount-display">
+          <div class="amount-label">Total a pagar</div>
+          <div class="amount-value">$448.10</div>
+          <div class="amount-sub">Incluye comisión TrustBuy + envío</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body">
+            <div class="section-label" style="margin-top:0">Desglose</div>
+            <div class="breakdown">
+              <div class="breakdown-row"><span class="lbl">Producto</span><span>$420.00</span></div>
+              <div class="breakdown-row"><span class="lbl">Comisión TrustBuy (5%)</span><span>$21.00</span></div>
+              <div class="breakdown-row"><span class="lbl">Costo de envío</span><span>$7.10</span></div>
+              <div class="breakdown-row total"><span class="lbl">Total</span><span style="color:var(--amber)">$448.10</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-badge">
+          <h4>🔒 PROTECCIÓN TRUSTBUY</h4>
+          <div class="trust-item"><span>✅</span><span>Tu dinero queda en custodia hasta confirmar recepción</span></div>
+          <div class="trust-item"><span>🔍</span><span>El producto es verificado físicamente por el courier</span></div>
+          <div class="trust-item"><span>⚖️</span><span>Si hay problema, abrimos una disputa y te protegemos</span></div>
+          <div class="trust-item"><span>↩️</span><span>Reembolso garantizado si el producto no llega o es diferente</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SELLER VIEW ===================== -->
+  <div id="view-seller" style="display:none">
+    <div class="grid">
+      <!-- LEFT -->
+      <div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header">
+            <div class="card-title">TU VENTA EN CURSO</div>
+            <span class="status-badge paid" id="seller-status-badge">● Pago recibido</span>
+          </div>
+          <div class="card-body">
+            <div class="product-block">
+              <div class="product-img">📱</div>
+              <div class="product-info">
+                <h3>iPhone 13 Pro 128GB — Grafito</h3>
+                <div class="price">$420.00</div>
+                <div class="meta">Comprador: Ana G. · Guayaquil</div>
+              </div>
+            </div>
+
+            <div class="section-label">Información del pedido</div>
+            <div class="info-row"><span class="lbl">ID Transacción</span><span class="val">TXN-2026-0847</span></div>
+            <div class="info-row"><span class="lbl">Fecha</span><span class="val">06 Mar 2026 · 11:42</span></div>
+            <div class="info-row"><span class="lbl">Método de pago</span><span class="val">Transferencia</span></div>
+            <div class="info-row"><span class="lbl">Ciudad destino</span><span class="val">Guayaquil</span></div>
+            <div class="info-row"><span class="lbl">Courier asignado</span><span class="val">⏳ Asignando...</span></div>
+
+            <div class="section-label">Estado del proceso</div>
+            <div class="timeline">
+              <div class="tl-step">
+                <div class="tl-dot done">✓</div>
+                <div class="tl-content">
+                  <div class="tl-label">Pago confirmado en custodia</div>
+                  <div class="tl-sub">El comprador pagó — dinero asegurado</div>
+                  <div class="tl-time">06 Mar · 11:42</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot active">📦</div>
+                <div class="tl-content">
+                  <div class="tl-label">Preparar para el courier</div>
+                  <div class="tl-sub">Empaca el producto — el courier llegará en breve</div>
+                  <div class="tl-time">Hoy — pendiente</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot pending">🚚</div>
+                <div class="tl-content">
+                  <div class="tl-label">En tránsito</div>
+                  <div class="tl-sub">El courier lo lleva al comprador</div>
+                  <div class="tl-time">— En espera</div>
+                </div>
+              </div>
+              <div class="tl-step">
+                <div class="tl-dot pending">💰</div>
+                <div class="tl-content">
+                  <div class="tl-label">Pago liberado a ti</div>
+                  <div class="tl-sub">El comprador confirma y recibes tu dinero</div>
+                  <div class="tl-time">— En espera</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seller actions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">ACCIONES</div>
+          </div>
+          <div class="card-body">
+            <div class="proof-preview">
+              <div class="icon">✅</div>
+              <p>El comprador <strong>confirmó el pago</strong>. Prepara el producto para cuando llegue el courier.</p>
+            </div>
+            <div class="seller-actions">
+              <button class="btn btn-primary" onclick="sellerReady()">📦 Producto listo para recoger</button>
+              <button class="btn btn-ghost" onclick="showToast('⚠️ Contacta a soporte: soporte@trustbuy.ec', 'warning')">💬 Contactar soporte</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Seller summary -->
+      <div class="summary-card">
+        <div class="amount-display">
+          <div class="amount-label">Recibirás</div>
+          <div class="amount-value" style="color:var(--green)">$420.00</div>
+          <div class="amount-sub">Tras confirmación del comprador</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body">
+            <div class="section-label" style="margin-top:0">Desglose de tu cobro</div>
+            <div class="breakdown">
+              <div class="breakdown-row"><span class="lbl">Precio del producto</span><span>$420.00</span></div>
+              <div class="breakdown-row"><span class="lbl">Comisión TrustBuy</span><span style="color:var(--muted)">— del comprador</span></div>
+              <div class="breakdown-row"><span class="lbl">Costo de envío</span><span style="color:var(--muted)">— del comprador</span></div>
+              <div class="breakdown-row total"><span class="lbl">Tu ganancia</span><span style="color:var(--green)">$420.00</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-badge">
+          <h4>💰 TU DINERO ESTÁ SEGURO</h4>
+          <div class="trust-item"><span>🔒</span><span>El pago ya está en custodia — no puede ser revertido</span></div>
+          <div class="trust-item"><span>📦</span><span>Solo debes empacar y esperar al courier</span></div>
+          <div class="trust-item"><span>⚡</span><span>Recibes el pago en 24-48h tras la entrega</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DISPUTE MODAL -->
+<div class="modal-overlay" id="modal-dispute">
+  <div class="modal">
+    <div class="modal-title">⚠️ REPORTAR PROBLEMA</div>
+    <div class="modal-sub">Describe el problema con el producto recibido. TrustBuy revisará tu caso en máximo 24 horas.</div>
+    <textarea id="dispute-text" placeholder="Ejemplo: El producto no enciende, tiene daños visibles, es diferente al anunciado..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDispute()" style="flex:1;padding:12px">Cancelar</button>
+      <button class="btn btn-danger" onclick="submitDispute()" style="flex:1;padding:12px;margin-top:0">Enviar disputa</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let currentRole = 'buyer';
+let paymentConfirmed = false;
+
+function setRole(role) {
+  currentRole = role;
+  document.getElementById('view-buyer').style.display = role === 'buyer' ? 'block' : 'none';
+  document.getElementById('view-seller').style.display = role === 'seller' ? 'block' : 'none';
+  document.getElementById('btn-buyer').classList.toggle('active', role === 'buyer');
+  document.getElementById('btn-seller').classList.toggle('active', role === 'seller');
+  document.getElementById('nav-user').textContent = role === 'buyer' ? '🛒 Ana G. (Comprador)' : '🏪 Carlos M. (Vendedor)';
+}
+
+function selectPay(method) {
+  document.querySelectorAll('.pay-method').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('transfer-details').classList.toggle('show', method === 'transfer');
+  document.getElementById('cash-details').classList.toggle('show', method === 'cash');
+  document.getElementById('mobile-details').classList.toggle('show', method === 'mobile');
+
+  if (method === 'cash') {
+    document.getElementById('upload-section').style.display = 'none';
+    document.getElementById('btn-pay').disabled = false;
+    document.getElementById('btn-pay').textContent = '🔒 Confirmar pedido con pago en efectivo';
+  } else {
+    document.getElementById('upload-section').style.display = 'block';
+    document.getElementById('btn-pay').textContent = '🔒 Confirmar pago y asegurar en custodia';
+    document.getElementById('btn-pay').disabled = !paymentConfirmed;
+  }
+}
+
+function handleFile(input) {
+  if (input.files.length > 0) {
+    paymentConfirmed = true;
+    document.getElementById('upload-area').classList.add('has-file');
+    document.getElementById('upload-icon').textContent = '✅';
+    document.getElementById('upload-text').innerHTML = `<strong>${input.files[0].name}</strong> cargado correctamente`;
+    document.getElementById('btn-pay').disabled = false;
+  }
+}
+
+function confirmPayment() {
+  const btn = document.getElementById('btn-pay');
+  btn.textContent = '⏳ Procesando...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    document.getElementById('payment-card').style.display = 'none';
+    document.getElementById('buyer-status-badge').className = 'status-badge in-escrow';
+    document.getElementById('buyer-status-badge').textContent = '● Pago en custodia';
+
+    // Update timeline
+    document.getElementById('tl-1').className = 'tl-dot done';
+    document.getElementById('tl-1').textContent = '✓';
+    document.getElementById('tl-time-1').textContent = 'Hoy · ' + now();
+    document.getElementById('tl-2').className = 'tl-dot active';
+
+    showToast('✅ ¡Pago confirmado! Tu dinero está en custodia segura.');
+
+    setTimeout(() => {
+      document.getElementById('tl-2').className = 'tl-dot done';
+      document.getElementById('tl-2').textContent = '✓';
+      document.getElementById('tl-time-2').textContent = 'Verificado por courier';
+      document.getElementById('tl-3').className = 'tl-dot active';
+      document.getElementById('tl-time-3').textContent = 'En camino...';
+      showToast('📦 El courier recogió y verificó el producto.');
+
+      setTimeout(() => {
+        document.getElementById('tl-3').className = 'tl-dot done';
+        document.getElementById('tl-3').textContent = '✓';
+        document.getElementById('tl-time-3').textContent = 'En tránsito';
+        document.getElementById('tl-4').className = 'tl-dot active';
+        document.getElementById('confirm-card').style.display = 'block';
+        document.getElementById('buyer-status-badge').className = 'status-badge verified';
+        document.getElementById('buyer-status-badge').textContent = '● Entregado — Confirmar';
+        showToast('🚚 ¡Tu producto llegó! Confirma la recepción para liberar el pago.');
+      }, 4000);
+    }, 3000);
+  }, 1800);
+}
+
+function confirmReceipt() {
+  document.getElementById('confirm-card').innerHTML = `
+    <div class="complete-screen show">
+      <div class="complete-icon">🎉</div>
+      <div class="complete-title">¡TRANSACCIÓN COMPLETA!</div>
+      <div class="complete-sub">Pago liberado al vendedor. <br>¡Gracias por usar TrustBuy!</div>
+      <div style="margin-top:24px">
+        <a href="index.html" style="text-decoration:none"><button class="btn btn-success" style="max-width:280px;margin:0 auto">🏠 Volver al inicio</button></a>
+      </div>
+    </div>
+  `;
+  document.getElementById('tl-4').className = 'tl-dot done';
+  document.getElementById('tl-4').textContent = '✓';
+  document.getElementById('tl-time-4').textContent = 'Completado · ' + now();
+  document.getElementById('buyer-status-badge').className = 'status-badge completed';
+  document.getElementById('buyer-status-badge').textContent = '● Completada';
+  showToast('🎉 ¡Transacción completada! El vendedor recibirá su pago.');
+}
+
+function sellerReady() {
+  showToast('✅ Notificación enviada al courier. Llegará pronto.');
+  event.target.textContent = '✅ Courier notificado';
+  event.target.disabled = true;
+  event.target.style.background = 'var(--green)';
+}
+
+function openDispute() {
+  document.getElementById('modal-dispute').classList.add('open');
+}
+function closeDispute() {
+  document.getElementById('modal-dispute').classList.remove('open');
+}
+function submitDispute() {
+  const text = document.getElementById('dispute-text').value.trim();
+  if (!text) { showToast('⚠️ Describe el problema primero', 'warning'); return; }
+  closeDispute();
+  showToast('⚖️ Disputa enviada. TrustBuy revisará tu caso en 24h.');
+}
+
+document.getElementById('modal-dispute').addEventListener('click', function(e) {
+  if (e.target === this) closeDispute();
+});
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Copiado al portapapeles'));
+}
+
+function now() {
+  return new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' });
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+</script>
+</body>
+</html>
