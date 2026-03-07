@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Panel de Administración</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --glow: rgba(79,110,247,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(79,110,247,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 196px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    padding: 0;
+  }
+
+  .logo {
+    padding: 16px 14px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .nav {
+    padding: 16px 12px;
+    flex: 1;
+  }
+
+  .nav-section {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    margin-top: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: var(--glow);
+    color: var(--accent);
+    border-color: rgba(79,110,247,0.2);
+  }
+
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .api-url {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  .api-url span { color: var(--accent); }
+
+  /* MAIN */
+  .main {
+    margin-left: 196px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .topbar {
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .refresh-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .refresh-btn:hover { background: var(--border); }
+
+  /* CONTENT */
+  .content {
+    padding: 32px;
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: rgba(79,110,247,0.3); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+
+  .stat-card.blue::before { background: var(--accent); }
+  .stat-card.purple::before { background: var(--accent2); }
+  .stat-card.green::before { background: var(--green); }
+  .stat-card.yellow::before { background: var(--yellow); }
+
+  .stat-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .stat-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    opacity: 0.5;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(42,42,61,0.5);
+    transition: background 0.1s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  td {
+    padding: 13px 16px;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .mono { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .badge.green { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .badge.blue { background: rgba(79,110,247,0.1); color: #818cf8; border: 1px solid rgba(79,110,247,0.2); }
+  .badge.yellow { background: rgba(245,158,11,0.1); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+  .badge.red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+  .badge.purple { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+  .badge.gray { background: rgba(107,107,138,0.1); color: var(--muted); border: 1px solid rgba(107,107,138,0.2); }
+
+  /* ACTION BTN */
+  .action-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .action-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    gap: 10px;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* EMPTY */
+  .empty {
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--glow); border-color: rgba(79,110,247,0.3); color: var(--accent); }
+
+  /* CONFIG PANEL */
+  .config-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .config-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .config-title::before {
+    content: '';
+    width: 3px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .input-group { display: flex; gap: 10px; align-items: center; }
+
+  input[type="text"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    flex: 1;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { background: #3b5be8; transform: translateY(-1px); }
+
+  .hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* OVERVIEW GRID */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: rgba(34,197,94,0.3); }
+  .toast.error { border-color: rgba(239,68,68,0.3); }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-icon">🔒</div>
+      TrustBuy
+    </div>
+    <div class="logo-sub">Admin Panel</div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="showPanel('overview')">
+      <span class="icon">◈</span> Resumen
+    </div>
+    <div class="nav-item" onclick="showPanel('users')">
+      <span class="icon">◉</span> Usuarios
+    </div>
+    <div class="nav-item" onclick="showPanel('products')">
+      <span class="icon">◫</span> Productos
+    </div>
+    <div class="nav-item" onclick="showPanel('transactions')">
+      <span class="icon">◌</span> Transacciones
+    </div>
+    <div class="nav-section">Sistema</div>
+    <div class="nav-item" onclick="showPanel('config')">
+      <span class="icon">⊙</span> Configuración
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="api-url">
+      <span>API →</span><br>
+      <span id="api-display">trustbuy-api.onrender.com</span>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="page-title" id="page-title">Resumen General</div>
+    <div class="topbar-right">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span id="api-status">Conectando...</span>
+      </div>
+      <button class="refresh-btn" onclick="loadCurrentPanel()">↻ Actualizar</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="panel-overview">
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon">◉</div>
+          <div class="stat-label">Usuarios</div>
+          <div class="stat-value" id="stat-users">—</div>
+          <div class="stat-sub">registrados</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-icon">◫</div>
+          <div class="stat-label">Productos</div>
+          <div class="stat-value" id="stat-products">—</div>
+          <div class="stat-sub">publicados</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">◌</div>
+          <div class="stat-label">Transacciones</div>
+          <div class="stat-value" id="stat-transactions">—</div>
+          <div class="stat-sub">totales</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-icon">$</div>
+          <div class="stat-label">Ingresos</div>
+          <div class="stat-value" id="stat-revenue">—</div>
+          <div class="stat-sub">comisiones USD</div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <div>
+          <div class="section-header">
+            <div class="section-title">Estado de Transacciones</div>
+          </div>
+          <div class="table-wrap" style="overflow-x:auto">
+            <table>
+              <thead><tr><th>Estado</th><th>Cantidad</th></tr></thead>
+              <tbody id="stats-table">
+                <tr><td colspan="2"><div class="loading"><div class="spinner"></div> Cargando...</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="section-header">
+            <div class="section-title">Últimas Transacciones</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead>
+              <tbody id="recent-transactions">
+                <tr><td colspan="3"><div class="loading"><div class="spinner"></div> Cargando...</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="panel" id="panel-users">
+      <div class="section-header">
+        <div class="section-title">Gestión de Usuarios</div>
+        <div class="section-count" id="users-count">— usuarios</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Cédula</th>
+              <th>Origen → Destino</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Reputación</th>
+              <th style="text-align:center;width:90px">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="users-table">
+            <tr><td colspan="9"><div class="loading"><div class="spinner"></div> Cargando usuarios...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="panel" id="panel-products">
+      <div class="section-header">
+        <div class="section-title">Gestión de Productos</div>
+        <div class="section-count" id="products-count">— productos</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Precio</th>
+              <th>Categoría</th>
+              <th>Ciudad</th>
+              <th>Estado</th>
+              <th>Publicado</th>
+            </tr>
+          </thead>
+          <tbody id="products-table">
+            <tr><td colspan="6"><div class="loading"><div class="spinner"></div> Cargando productos...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="panel" id="panel-transactions">
+      <div class="section-header">
+        <div class="section-title">Gestión de Transacciones</div>
+        <div class="section-count" id="transactions-count">— transacciones</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterTransactions(null, this)">Todas</button>
+        <button class="filter-btn" onclick="filterTransactions('in_escrow', this)">En Custodia</button>
+        <button class="filter-btn" onclick="filterTransactions('in_transit', this)">En Tránsito</button>
+        <button class="filter-btn" onclick="filterTransactions('completed', this)">Completadas</button>
+        <button class="filter-btn" onclick="filterTransactions('disputed', this)">Disputadas</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Monto</th>
+              <th>Comisión</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Método</th>
+              <th>Fecha</th>
+              <th style="text-align:center;width:90px">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="transactions-table">
+            <tr><td colspan="8"><div class="loading"><div class="spinner"></div> Cargando transacciones...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CONFIG -->
+    <div class="panel" id="panel-config">
+      <div class="config-panel">
+        <div class="config-title">URL del API</div>
+        <div class="input-group">
+          <input type="text" id="api-url-input" value="https://trustbuy-api.onrender.com" placeholder="https://tu-api.onrender.com">
+          <button class="btn-primary" onclick="saveApiUrl()">Guardar y Conectar</button>
+        </div>
+        <div class="hint">Cambia esta URL si tienes el API corriendo localmente: http://127.0.0.1:8000</div>
+      </div>
+
+      <div class="config-panel">
+        <div class="config-title">Conexión Actual</div>
+        <table style="width:100%">
+          <tbody id="config-info">
+            <tr><td colspan="2"><div class="loading"><div class="spinner"></div> Verificando...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let API_URL = localStorage.getItem('trustbuy_api') || 'https://trustbuy-api.onrender.com';
+  let allTransactions = [];
+  let currentPanel = 'overview';
+
+  // Init
+  document.getElementById('api-url-input').value = API_URL;
+  document.getElementById('api-display').textContent = API_URL.replace('https://','').replace('http://','');
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = (type === 'success' ? '✓ ' : '✗ ') + msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.className = 'toast', 3000);
+  }
+
+  function saveApiUrl() {
+    API_URL = document.getElementById('api-url-input').value.trim().replace(/\/$/, '');
+    localStorage.setItem('trustbuy_api', API_URL);
+    document.getElementById('api-display').textContent = API_URL.replace('https://','').replace('http://','');
+    showToast('API configurada correctamente');
+    checkConnection();
+    loadStats();
+  }
+
+  async function checkConnection() {
+    try {
+      const r = await fetch(`${API_URL}/health`);
+      const data = await r.json();
+      document.getElementById('api-status').textContent = 'En línea';
+      return true;
+    } catch {
+      document.getElementById('api-status').textContent = 'Sin conexión';
+      return false;
+    }
+  }
+
+  function statusBadge(status) {
+    const map = {
+      in_escrow: ['blue', 'En Custodia'],
+      in_transit: ['yellow', 'En Tránsito'],
+      completed: ['green', 'Completada'],
+      disputed: ['red', 'Disputada'],
+      refunded: ['purple', 'Reembolsada'],
+      cancelled: ['gray', 'Cancelada'],
+      active: ['green', 'Activo'],
+      reserved: ['yellow', 'Reservado'],
+      sold: ['blue', 'Vendido'],
+    };
+    const [cls, label] = map[status] || ['gray', status];
+    return `<span class="badge ${cls}"><span class="badge-dot" style="background:currentColor"></span>${label}</span>`;
+  }
+
+  function roleBadge(role) {
+    const map = { buyer: ['blue','Comprador'], seller: ['purple','Vendedor'], both: ['green','Ambos'], verifier: ['yellow','Verificador'] };
+    const [cls, label] = map[role] || ['gray', role];
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+
+  function fmtDate(d) {
+    if (!d || d === 'None') return '—';
+    return new Date(d).toLocaleDateString('es-EC', { day:'2-digit', month:'short', year:'numeric' });
+  }
+
+  function shortId(id) {
+    return `<span class="mono">${id.slice(0,8)}...</span>`;
+  }
+
+  // LOAD STATS
+  async function loadStats() {
+    try {
+      const r = await fetch(`${API_URL}/admin/stats`);
+      const d = await r.json();
+      document.getElementById('stat-users').textContent = d.total_users;
+      document.getElementById('stat-products').textContent = d.total_products;
+      document.getElementById('stat-transactions').textContent = d.total_transactions;
+      document.getElementById('stat-revenue').textContent = `$${d.total_revenue_usd}`;
+
+      document.getElementById('stats-table').innerHTML = `
+        <tr><td>Completadas</td><td>${statusBadge('completed')} ${d.transactions_completed}</td></tr>
+        <tr><td>En Custodia</td><td>${statusBadge('in_escrow')} ${d.transactions_in_escrow}</td></tr>
+        <tr><td>Disputadas</td><td>${statusBadge('disputed')} ${d.transactions_disputed}</td></tr>
+      `;
+    } catch(e) {
+      document.getElementById('stats-table').innerHTML = `<tr><td colspan="2"><div class="empty">⚠ No se pudo conectar al API</div></td></tr>`;
+    }
+  }
+
+  // LOAD USERS
+  async function loadUsers() {
+    try {
+      const r = await fetch(`${API_URL}/admin/users`);
+      const users = await r.json();
+      document.getElementById('users-count').textContent = `${users.length} usuarios`;
+      if (!users.length) {
+        document.getElementById('users-table').innerHTML = `<tr><td colspan="7"><div class="empty">No hay usuarios registrados</div></td></tr>`;
+        return;
+      }
+      document.getElementById('users-table').innerHTML = users.map(u => `
+        <tr>
+          <td><strong>${u.full_name}</strong></td>
+          <td class="mono">${u.email}</td>
+          <td class="mono">${u.phone || '—'}</td>
+          <td class="mono">${u.cedula || '—'}</td>
+          <td class="mono" style="font-size:12px">${u.city_origin || '—'} → ${u.city_destination || '—'}</td>
+          <td style="text-align:center">${roleBadge(u.role)}</td>
+          <td>${u.is_active ? statusBadge('active') : `<span class="badge red">Suspendido</span>`}</td>
+          <td class="mono">${u.reputation_score?.toFixed(1) || '0.0'} ⭐</td>
+          <td style="text-align:center">
+            ${u.is_active
+              ? `<button class="action-btn danger" style="white-space:nowrap;padding:4px 8px;font-size:11px" onclick="updateUserStatus('${u.id}', false)">Suspender</button>`
+              : `<button class="action-btn" onclick="updateUserStatus('${u.id}', true)">Activar</button>`
+            }
+          </td>
+        </tr>
+      `).join('');
+    } catch {
+      document.getElementById('users-table').innerHTML = `<tr><td colspan="7"><div class="empty">⚠ Error al cargar usuarios</div></td></tr>`;
+    }
+  }
+
+  // UPDATE USER STATUS
+  async function updateUserStatus(id, active) {
+    try {
+      const r = await fetch(`${API_URL}/admin/users/${id}/status?is_active=${active}`, { method: 'PUT' });
+      const d = await r.json();
+      showToast(d.message);
+      loadUsers();
+    } catch {
+      showToast('Error al actualizar usuario', 'error');
+    }
+  }
+
+  // LOAD PRODUCTS
+  async function loadProducts() {
+    try {
+      const r = await fetch(`${API_URL}/admin/products`);
+      const products = await r.json();
+      document.getElementById('products-count').textContent = `${products.length} productos`;
+      if (!products.length) {
+        document.getElementById('products-table').innerHTML = `<tr><td colspan="6"><div class="empty">No hay productos publicados</div></td></tr>`;
+        return;
+      }
+      document.getElementById('products-table').innerHTML = products.map(p => `
+        <tr>
+          <td><strong>${p.title}</strong></td>
+          <td class="mono">$${p.price}</td>
+          <td>${p.category || '—'}</td>
+          <td>${p.city || '—'}</td>
+          <td>${statusBadge(p.status)}</td>
+          <td class="mono">${fmtDate(p.created_at)}</td>
+        </tr>
+      `).join('');
+    } catch {
+      document.getElementById('products-table').innerHTML = `<tr><td colspan="6"><div class="empty">⚠ Error al cargar productos</div></td></tr>`;
+    }
+  }
+
+  // LOAD TRANSACTIONS
+  async function loadTransactions(status = null) {
+    try {
+      const url = status ? `${API_URL}/admin/transactions?status=${status}` : `${API_URL}/admin/transactions`;
+      const r = await fetch(url);
+      allTransactions = await r.json();
+      renderTransactions(allTransactions);
+
+      // recent for overview
+      const recent = [...allTransactions].slice(-5).reverse();
+      document.getElementById('recent-transactions').innerHTML = recent.length
+        ? recent.map(t => `
+          <tr>
+            <td class="mono">$${t.amount}</td>
+            <td>${statusBadge(t.status)}</td>
+            <td class="mono">${fmtDate(t.created_at)}</td>
+          </tr>`).join('')
+        : `<tr><td colspan="3"><div class="empty">Sin transacciones</div></td></tr>`;
+    } catch {
+      document.getElementById('transactions-table').innerHTML = `<tr><td colspan="8"><div class="empty">⚠ Error al cargar transacciones</div></td></tr>`;
+    }
+  }
+
+  function renderTransactions(txs) {
+    document.getElementById('transactions-count').textContent = `${txs.length} transacciones`;
+    if (!txs.length) {
+      document.getElementById('transactions-table').innerHTML = `<tr><td colspan="8"><div class="empty">No hay transacciones</div></td></tr>`;
+      return;
+    }
+    document.getElementById('transactions-table').innerHTML = txs.map(t => `
+      <tr>
+        <td>${shortId(t.id)}</td>
+        <td class="mono">$${t.amount}</td>
+        <td class="mono">$${t.platform_fee}</td>
+        <td class="mono"><strong>$${t.total}</strong></td>
+        <td>${statusBadge(t.status)}</td>
+        <td class="mono">${t.payment_method || '—'}</td>
+        <td class="mono">${fmtDate(t.created_at)}</td>
+        <td>
+          ${t.status === 'disputed'
+            ? `<button class="action-btn" onclick="resolveDispute('${t.id}','release')">Liberar</button>
+               <button class="action-btn danger" onclick="resolveDispute('${t.id}','refund')" style="margin-left:4px">Reembolsar</button>`
+            : '—'
+          }
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterTransactions(status, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (status) {
+      renderTransactions(allTransactions.filter(t => t.status === status));
+    } else {
+      renderTransactions(allTransactions);
+    }
+  }
+
+  async function resolveDispute(id, resolution) {
+    try {
+      const r = await fetch(`${API_URL}/admin/transactions/${id}/resolve?resolution=${resolution}`, { method: 'PUT' });
+      const d = await r.json();
+      showToast(d.message);
+      loadTransactions();
+    } catch {
+      showToast('Error al resolver disputa', 'error');
+    }
+  }
+
+  // CONFIG INFO
+  async function loadConfigInfo() {
+    try {
+      const r = await fetch(`${API_URL}/health`);
+      const d = await r.json();
+      document.getElementById('config-info').innerHTML = `
+        <tr><td style="color:var(--muted);padding:8px 0;width:140px">Estado</td><td>${statusBadge('active')}</td></tr>
+        <tr><td style="color:var(--muted);padding:8px 0">API URL</td><td class="mono">${API_URL}</td></tr>
+        <tr><td style="color:var(--muted);padding:8px 0">Mensaje</td><td>${d.message}</td></tr>
+      `;
+    } catch {
+      document.getElementById('config-info').innerHTML = `<tr><td colspan="2"><div class="empty">⚠ Sin conexión al API. Verifica la URL.</div></td></tr>`;
+    }
+  }
+
+  // PANEL NAVIGATION
+  function showPanel(name) {
+    currentPanel = name;
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    event.currentTarget.classList.add('active');
+
+    const titles = { overview:'Resumen General', users:'Usuarios', products:'Productos', transactions:'Transacciones', config:'Configuración' };
+    document.getElementById('page-title').textContent = titles[name];
+    loadCurrentPanel();
+  }
+
+  function loadCurrentPanel() {
+    if (currentPanel === 'overview') { loadStats(); loadTransactions(); }
+    else if (currentPanel === 'users') loadUsers();
+    else if (currentPanel === 'products') loadProducts();
+    else if (currentPanel === 'transactions') loadTransactions();
+    else if (currentPanel === 'config') loadConfigInfo();
+  }
+
+  // INIT
+  checkConnection();
+  loadStats();
+  loadTransactions();
+</script>
+</body>
+</html>
