@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBuy — Iniciar sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F8ECE1;
+    --cream2: #f0e4d4;
+    --cream3: #fdf7f0;
+    --navy: #020b18;
+    --blue: #1a6fff;
+    --green: #00a87a;
+    --amber: #e07800;
+    --red: #d63030;
+    --text: #1a0e08;
+    --muted: #9a7a60;
+    --border: rgba(180,140,100,0.25);
+    --shadow: 0 4px 24px rgba(100,60,20,0.1);
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy);
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .nav-logo svg { width: 160px; height: 48px; }
+  .nav-back { color: #a0b4c8; font-size: 13px; font-family: 'DM Mono', monospace; text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: #e8f4ff; }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .login-wrap {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    letter-spacing: 2px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  /* FORM */
+  .form-group { margin-bottom: 16px; }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #7a5a40;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    background: var(--cream3);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus {
+    border-color: var(--blue);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(26,111,255,0.08);
+  }
+
+  .form-group input::placeholder { color: #c0a888; }
+
+  .password-wrap { position: relative; }
+
+  .password-wrap input { padding-right: 44px; }
+
+  .toggle-pass {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--muted);
+    padding: 4px;
+    transition: color 0.2s;
+  }
+  .toggle-pass:hover { color: var(--amber); }
+
+  /* REMEMBER + FORGOT */
+  .form-extra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    margin-top: 4px;
+  }
+
+  .remember-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .remember-row input[type="checkbox"] {
+    width: 15px; height: 15px;
+    accent-color: var(--amber);
+    cursor: pointer;
+  }
+
+  .forgot-link {
+    font-size: 13px;
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .forgot-link:hover { opacity: 0.7; }
+
+  /* BUTTONS */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary { background: var(--amber); color: white; }
+  .btn-primary:hover { background: #c86a00; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(224,120,0,0.3); }
+  .btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .register-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .register-link a {
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .register-link a:hover { text-decoration: underline; }
+
+  /* RECOVERY MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+
+  .modal-footer { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-footer .btn { flex: 1; padding: 12px; font-size: 14px; }
+  .btn-ghost {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* SUCCESS STATE */
+  .recovery-success {
+    text-align: center;
+    padding: 8px 0;
+  }
+  .recovery-success .icon { font-size: 40px; margin-bottom: 12px; }
+  .recovery-success p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: white;
+    border: 1.5px solid var(--green);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 24px rgba(100,60,20,0.12);
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--red); }
+  .toast.warning { border-color: var(--amber); }
+
+  /* WELCOME BANNER */
+  .welcome-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(0,168,122,0.1), rgba(26,111,255,0.05));
+    border: 1px solid rgba(0,168,122,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .welcome-banner.show { display: block; }
+  .welcome-name { font-weight: 700; color: var(--green); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="160" height="48" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="120" fill="#020b18" rx="16"/>
+      <path d="M32 20 L64 8 L96 20 L96 56 C96 80 64 96 64 96 C64 96 32 80 32 56 Z" fill="url(#sgLogin)"/>
+      <path d="M50 34 L64 26 L78 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(90,64,52)"/>
+      <path d="M78 70 L64 78 L50 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6" transform="rotate(90,64,52)"/>
+      <path d="M55 53 L62 60 L74 46" stroke="#ff8c00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="116" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#e8f4ff">TRUST</text>
+      <path d="M271 47 L271 38 Q278 29 285 38 L285 47" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="266" y="47" width="24" height="19" rx="4" fill="#ff8c00"/>
+      <circle cx="278" cy="55" r="3.5" fill="#020b18"/>
+      <rect x="276.2" y="55" width="3.6" height="6" rx="1" fill="#020b18"/>
+      <text x="300" y="68" font-family="Bebas Neue, Impact, sans-serif" font-size="56" letter-spacing="3" fill="#00c896">BUY</text>
+      <text x="116" y="100" font-family="Space Grotesk, Arial, sans-serif" font-size="12" letter-spacing="2.5" fill="#F8ECE1">PAGA SOLO CUANDO LLEGUE · EC.</text>
+      <defs>
+        <linearGradient id="sgLogin" x1="32" y1="8" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a6fff"/>
+          <stop offset="100%" stop-color="#00c896"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <a href="index.html" class="nav-back">← Volver al inicio</a>
+</nav>
+
+<div class="main">
+  <div class="login-wrap">
+
+    <!-- WELCOME BANNER (si hay sesión guardada) -->
+    <div class="welcome-banner" id="welcome-banner">
+      👋 Bienvenido de nuevo, <span class="welcome-name" id="welcome-name"></span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">INICIAR SESIÓN</div>
+      <div class="card-subtitle">Ingresa a tu cuenta TrustBuy para comprar y vender con seguridad.</div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="juan@email.com" autocomplete="email"/>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="password-wrap">
+          <input type="password" id="f-pass" placeholder="••••••••" autocomplete="current-password"/>
+          <button class="toggle-pass" onclick="togglePass()" type="button" id="toggle-btn">👁️</button>
+        </div>
+      </div>
+
+      <div class="form-extra">
+        <label class="remember-row">
+          <input type="checkbox" id="remember-me"/> Recordar sesión
+        </label>
+        <a href="#" class="forgot-link" onclick="openRecovery()">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button class="btn btn-primary" id="btn-login" onclick="doLogin()">
+        🔐 Ingresar a mi cuenta
+      </button>
+
+      <div class="divider">¿No tienes cuenta?</div>
+
+      <div class="register-link">
+        <a href="registro.html">Crear cuenta gratis →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RECUPERAR CONTRASEÑA -->
+<div class="modal-overlay" id="modal-recovery">
+  <div class="modal">
+    <div id="recovery-form">
+      <div class="modal-title">🔑 RECUPERAR CONTRASEÑA</div>
+      <div class="modal-sub">Ingresa tu email y te enviaremos instrucciones para restablecer tu contraseña.</div>
+      <div class="form-group">
+        <label>Email registrado</label>
+        <input type="email" id="recovery-email" placeholder="juan@email.com"/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeRecovery()">Cancelar</button>
+        <button class="btn btn-primary" onclick="sendRecovery()">Enviar</button>
+      </div>
+    </div>
+    <div id="recovery-success" class="recovery-success" style="display:none">
+      <div class="icon">📧</div>
+      <div class="modal-title" style="font-size:20px">¡Enviado!</div>
+      <p>Revisa tu bandeja de entrada. Si el email está registrado recibirás las instrucciones en breve.</p>
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" onclick="closeRecovery()">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://trustbuy-api.onrender.com';
+
+// Check remembered session on load
+window.addEventListener('load', () => {
+  const remembered = localStorage.getItem('tb_email');
+  if (remembered) {
+    document.getElementById('f-email').value = remembered;
+    document.getElementById('remember-me').checked = true;
+    const name = localStorage.getItem('tb_name');
+    if (name) {
+      document.getElementById('welcome-name').textContent = name;
+      document.getElementById('welcome-banner').classList.add('show');
+    }
+  }
+});
+
+function togglePass() {
+  const input = document.getElementById('f-pass');
+  const btn = document.getElementById('toggle-btn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById('f-email').value.trim();
+  const pass = document.getElementById('f-pass').value;
+  const remember = document.getElementById('remember-me').checked;
+
+  if (!email || !email.includes('@')) {
+    showToast('⚠️ Ingresa un email válido', 'error'); return;
+  }
+  if (!pass) {
+    showToast('⚠️ Ingresa tu contraseña', 'error'); return;
+  }
+
+  const btn = document.getElementById('btn-login');
+  btn.textContent = '⏳ Ingresando...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // Save token
+      sessionStorage.setItem('tb_token', data.access_token);
+
+      // Remember session
+      if (remember) {
+        localStorage.setItem('tb_email', email);
+      } else {
+        localStorage.removeItem('tb_email');
+        localStorage.removeItem('tb_name');
+      }
+
+      // Get user info to redirect by role
+      try {
+        const meRes = await fetch(API + '/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + data.access_token }
+        });
+        if (meRes.ok) {
+          const me = await meRes.json();
+          if (remember) localStorage.setItem('tb_name', me.full_name);
+          showToast('✅ Bienvenido, ' + me.full_name + '!');
+          setTimeout(() => redirectByRole(me.role), 1500);
+        } else {
+          showToast('✅ Sesión iniciada correctamente');
+          setTimeout(() => window.location.href = 'index.html', 1500);
+        }
+      } catch {
+        showToast('✅ Sesión iniciada correctamente');
+        setTimeout(() => window.location.href = 'index.html', 1500);
+      }
+
+    } else if (res.status === 401) {
+      showToast('❌ Email o contraseña incorrectos', 'error');
+      btn.textContent = '🔐 Ingresar a mi cuenta';
+      btn.disabled = false;
+    } else {
+      showToast('⚠️ ' + (data.detail || 'Error al iniciar sesión'), 'error');
+      btn.textContent = '🔐 Ingresar a mi cuenta';
+      btn.disabled = false;
+    }
+
+  } catch(e) {
+    showToast('⚠️ Error de conexión. Intenta de nuevo.', 'error');
+    btn.textContent = '🔐 Ingresar a mi cuenta';
+    btn.disabled = false;
+  }
+}
+
+function redirectByRole(role) {
+  if (role === 'courier') {
+    window.location.href = 'courier.html';
+  } else if (role === 'admin') {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+function openRecovery() {
+  document.getElementById('recovery-form').style.display = 'block';
+  document.getElementById('recovery-success').style.display = 'none';
+  document.getElementById('modal-recovery').classList.add('open');
+}
+
+function closeRecovery() {
+  document.getElementById('modal-recovery').classList.remove('open');
+  document.getElementById('recovery-email').value = '';
+}
+
+function sendRecovery() {
+  const email = document.getElementById('recovery-email').value.trim();
+  if (!email || !email.includes('@')) {
+    showToast('⚠️ Ingresa un email válido', 'warning'); return;
+  }
+  // Show success state (email sending would be implemented with backend)
+  document.getElementById('recovery-form').style.display = 'none';
+  document.getElementById('recovery-success').style.display = 'block';
+}
+
+// Close modal on overlay click
+document.getElementById('modal-recovery').addEventListener('click', function(e) {
+  if (e.target === this) closeRecovery();
+});
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
